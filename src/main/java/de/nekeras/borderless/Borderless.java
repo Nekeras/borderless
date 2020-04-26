@@ -73,15 +73,16 @@ public class Borderless {
 
         VideoMode videoMode = monitor.getDefaultVideoMode();
 
-        log.info("Entering fullscreen on monitor 0x{} with resolution {}x{}",
+        log.info("Entering fullscreen on monitor 0x{} with resolution {}x{} on position {}|{}",
             Long.toHexString(monitor.getMonitorPointer()),
-            videoMode.getWidth(),
-            videoMode.getHeight());
+            videoMode.getWidth(), videoMode.getHeight(),
+            monitor.getVirtualPosX(), monitor.getVirtualPosY());
 
         GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE);
         GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_DECORATED, GLFW.GLFW_FALSE);
-        GLFW.glfwSetWindowMonitor(window.getHandle(), 0, 0, 0,
-            videoMode.getWidth(), videoMode.getHeight(), GLFW.GLFW_DONT_CARE);
+        GLFW.glfwSetWindowMonitor(window.getHandle(), 0, monitor.getVirtualPosX(),
+            monitor.getVirtualPosY(), videoMode.getWidth(), videoMode.getHeight(),
+            GLFW.GLFW_DONT_CARE);
     }
 
     /**
