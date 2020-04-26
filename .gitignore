@@ -1,0 +1,9 @@
+# JetBrains
+.idea/
+
+# Gradle
+.gradle/
+build/
+
+# Forge
+run/
