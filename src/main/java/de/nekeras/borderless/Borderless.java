@@ -98,7 +98,7 @@ public class Borderless {
         log.info("Leaving fullscreen and resetting window size");
 
         GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_DECORATED, GLFW.GLFW_TRUE);
-        GLFW.glfwSetWindowSize(window.getHandle(), 800, 600);
+        GLFW.glfwSetWindowSize(window.getHandle(), window.getWidth(), window.getHeight());
     }
 
 }
