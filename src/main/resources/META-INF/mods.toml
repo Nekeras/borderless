@@ -6,8 +6,10 @@ issueTrackerURL="https://github.com/Nekeras/borderless/issues"
     modId="borderless"
     version="${version}"
     displayName="Borderless Window"
-    displayURL="https://nekeras.de/projects/borderless"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/borderless"
+    logoFile="logo.png"
     authors="Nekeras"
     description='''
-    Enables the fullscreen mode 'Borderless Window', which replaces the standard Minecraft fullscreen. This allows to easily switch monitors when Minecraft is not focussed, without minimizing the game.
+    Replaces the standard Minecraft fullscreen with a borderless window.
+    This allows to easily switch monitors when Minecraft is not focussed, without minimizing the game.
     '''

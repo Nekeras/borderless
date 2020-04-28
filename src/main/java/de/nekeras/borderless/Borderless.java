@@ -19,10 +19,16 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.network.FMLNetworkConstants;
 
+/**
+ * The main Forge mod class.
+ */
 @Mod(Borderless.MOD_ID)
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD)
 public class Borderless {
 
+    /**
+     * The mod id of this Forge mod.
+     */
     public static final String MOD_ID = "borderless";
 
     private static final Logger log = LogManager.getLogger();

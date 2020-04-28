@@ -13,7 +13,9 @@ import net.minecraft.client.renderer.IWindowEventListener;
 /**
  * Minecraft native code reflection util for easier access of some fields and methods.
  */
-public class ReflectionUtil {
+public final class ReflectionUtil {
+
+    private ReflectionUtil() {}
 
     /**
      * Updates the {@link IWindowEventListener} in the {@link MainWindow} instance with a custom
