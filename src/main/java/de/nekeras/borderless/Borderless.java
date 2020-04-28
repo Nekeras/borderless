@@ -45,7 +45,7 @@ public class Borderless {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent e) {
         Minecraft minecraft = Minecraft.getInstance();
-        MainWindow window = minecraft.mainWindow;
+        MainWindow window = minecraft.getMainWindow();
         ReflectionUtil.updateWindowEventListener(window, BorderlessWindowEventListener::new);
     }
 
@@ -71,7 +71,7 @@ public class Borderless {
      */
     public static void enterBorderlessFullscreen(MainWindow window) {
         fullscreenState = true;
-        Monitor monitor = window.func_224796_s();
+        Monitor monitor = window.getMonitor();
 
         if (monitor == null) {
             return;

@@ -37,11 +37,6 @@ public class BorderlessWindowEventListener implements IWindowEventListener {
     }
 
     @Override
-    public void updateDisplay(boolean limitFramerate) {
-        defaultWindowEventListener.updateDisplay(limitFramerate);
-    }
-
-    @Override
     public void updateWindowSize() {
         defaultWindowEventListener.updateWindowSize();
 
@@ -49,20 +44,16 @@ public class BorderlessWindowEventListener implements IWindowEventListener {
             return;
         }
 
-        MainWindow window = Minecraft.getInstance().mainWindow;
+        MainWindow window = Minecraft.getInstance().getMainWindow();
 
-        if (window == null) {
-            log.warn("Window is null, this is probably a bug");
-        } else {
-            log.info("Window fullscreen state: {}", window.isFullscreen());
-            log.info("In borderless fullscreen: {}", Borderless.isInBorderlessFullscreen());
+        log.info("Window fullscreen state: {}", window.isFullscreen());
+        log.info("In borderless fullscreen: {}", Borderless.isInBorderlessFullscreen());
 
-            if (window.isFullscreen() != Borderless.isInBorderlessFullscreen()) {
-                if (window.isFullscreen()) {
-                    Borderless.enterBorderlessFullscreen(window);
-                } else {
-                    Borderless.leaveBorderlessFullscreen(window);
-                }
+        if (window.isFullscreen() != Borderless.isInBorderlessFullscreen()) {
+            if (window.isFullscreen()) {
+                Borderless.enterBorderlessFullscreen(window);
+            } else {
+                Borderless.leaveBorderlessFullscreen(window);
             }
         }
     }
