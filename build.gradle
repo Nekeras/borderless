@@ -23,13 +23,51 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: forgeMappings
+    mappings channel: 'snapshot', version: "${forgeMappings}"
 
     runs {
         client {
             workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+
+            mods {
+                borderless {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                borderless {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'borderless', '--all', '--output', file('src/generated/resources/')
 
             mods {
                 borderless {
@@ -46,7 +84,7 @@ repositories {
 }
 
 dependencies {
-    minecraft group: 'net.minecraftforge', name: 'forge', version: "$minecraftVersion-$forgeVersion"
+    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
 }
 
 jar {
