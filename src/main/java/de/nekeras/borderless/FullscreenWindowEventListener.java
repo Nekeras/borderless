@@ -6,28 +6,29 @@ import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jline.terminal.impl.jna.osx.CLibrary.winsize;
 
+import de.nekeras.borderless.fullscreen.FullscreenMode;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IWindowEventListener;
 
 /**
  * A custom {@link IWindowEventListener} that will call all original methods of the supplied
- * default event listener. In addition, this method will enter a borderless fullscreen or leave it,
+ * default event listener. In addition, this method will apply or reset the current fullscreen mode,
  * once {@link MainWindow#isFullscreen()} returns <code>true</code> or <code>false</code>
  * respectively.
  *
- * @see Borderless#enterBorderlessFullscreen(MainWindow)
- * @see Borderless#leaveBorderlessFullscreen(MainWindow)
+ * @see Borderless#getFullscreenMode()
+ * @see FullscreenMode#apply(MainWindow)
+ * @see FullscreenMode#reset(MainWindow)
  */
-public class BorderlessWindowEventListener implements IWindowEventListener {
+public class FullscreenWindowEventListener implements IWindowEventListener {
 
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger LOG = LogManager.getLogger();
 
     private final IWindowEventListener defaultWindowEventListener;
 
-    public BorderlessWindowEventListener(@Nonnull IWindowEventListener defaultWindowEventListener) {
+    public FullscreenWindowEventListener(@Nonnull IWindowEventListener defaultWindowEventListener) {
         this.defaultWindowEventListener = Objects.requireNonNull(defaultWindowEventListener);
     }
 
@@ -45,16 +46,22 @@ public class BorderlessWindowEventListener implements IWindowEventListener {
         }
 
         MainWindow window = Minecraft.getInstance().getMainWindow();
+        FullscreenMode fullscreenMode = Borderless.getFullscreenMode();
 
-        log.info("Window fullscreen state: {}", window.isFullscreen());
-        log.info("In borderless fullscreen: {}", Borderless.isInBorderlessFullscreen());
+        LOG.info("Window fullscreen state: {}", window.isFullscreen());
+        LOG.info("In native fullscreen: {}", Borderless.isInNativeFullscreen(window));
 
-        if (window.isFullscreen() != Borderless.isInBorderlessFullscreen()) {
-            if (window.isFullscreen()) {
-                Borderless.enterBorderlessFullscreen(window);
-            } else {
-                Borderless.leaveBorderlessFullscreen(window);
-            }
+        if (fullscreenMode == null) {
+            LOG.error("Unexpected null value for fullscreen mode");
+            return;
+        }
+
+        if (fullscreenMode.shouldApply(window)) {
+            fullscreenMode.apply(window);
+        }
+
+        if (fullscreenMode.shouldReset(window)) {
+            fullscreenMode.reset(window);
         }
     }
 
