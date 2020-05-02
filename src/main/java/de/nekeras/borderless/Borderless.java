@@ -1,11 +1,14 @@
 package de.nekeras.borderless;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
 import de.nekeras.borderless.fullscreen.FullscreenMode;
@@ -13,6 +16,7 @@ import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +36,7 @@ public class Borderless {
      */
     public static final String MOD_ID = "borderless";
 
+    private static final Logger LOG = LogManager.getLogger();
     private static FullscreenMode fullscreenMode = FullscreenMode.BORDERLESS;
 
     public Borderless() {
@@ -41,11 +46,20 @@ public class Borderless {
             () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
     }
 
+    @SuppressWarnings("deprecation")
     @SubscribeEvent
-    public static void onClientSetup(@Nullable FMLClientSetupEvent e) {
-        Minecraft minecraft = Minecraft.getInstance();
-        MainWindow window = minecraft.getMainWindow();
-        ReflectionUtil.updateWindowEventListener(window, FullscreenWindowEventListener::new);
+    public static void onClientSetup(@Nullable FMLClientSetupEvent event) {
+        LOG.info("Enqueue WindowEventListener update to main thread");
+
+        DeferredWorkQueue.runLater(() -> {
+            LOG.info("Overwriting Minecraft WindowEventListener");
+            Minecraft minecraft = Minecraft.getInstance();
+            MainWindow window = minecraft.getMainWindow();
+            ReflectionUtil.updateWindowEventListener(window, FullscreenWindowEventListener::new);
+            LOG.info("Overwrite finished");
+
+            updateFullscreenMode(window);
+        });
     }
 
     /**
@@ -79,6 +93,39 @@ public class Borderless {
      */
     public static void setFullscreenMode(@Nonnull FullscreenMode fullscreenMode) {
         Borderless.fullscreenMode = Objects.requireNonNull(fullscreenMode);
+
+        Minecraft minecraft = Minecraft.getInstance();
+        updateFullscreenMode(minecraft.getMainWindow());
+    }
+
+    /**
+     * Triggers an update for current {@link FullscreenMode} on the given {@link MainWindow}.
+     *
+     * @param window The window to update
+     */
+    public static void updateFullscreenMode(MainWindow window) {
+        if (fullscreenMode == null) {
+            LOG.error("Unexpected null value for fullscreen mode");
+            return;
+        }
+
+        LOG.info("Updating fullscreen mode '{}' - Window fullscreen: {}; Native fullscreen: {}",
+            fullscreenMode.getClass().getName(),
+            window.isFullscreen(),
+            isInNativeFullscreen(window));
+
+        boolean shouldApply = fullscreenMode.shouldApply(window);
+        boolean shouldReset = fullscreenMode.shouldReset(window);
+
+        LOG.info("Fullscreen mode - shouldApply: {}; shouldReset: {}", shouldApply, shouldReset);
+
+        if (shouldApply) {
+            fullscreenMode.apply(window);
+        }
+
+        if (shouldReset) {
+            fullscreenMode.reset(window);
+        }
     }
 
 }

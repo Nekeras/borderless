@@ -24,8 +24,6 @@ import net.minecraft.client.renderer.IWindowEventListener;
  */
 public class FullscreenWindowEventListener implements IWindowEventListener {
 
-    private static final Logger LOG = LogManager.getLogger();
-
     private final IWindowEventListener defaultWindowEventListener;
 
     public FullscreenWindowEventListener(@Nonnull IWindowEventListener defaultWindowEventListener) {
@@ -46,23 +44,7 @@ public class FullscreenWindowEventListener implements IWindowEventListener {
         }
 
         MainWindow window = Minecraft.getInstance().getMainWindow();
-        FullscreenMode fullscreenMode = Borderless.getFullscreenMode();
-
-        LOG.info("Window fullscreen state: {}", window.isFullscreen());
-        LOG.info("In native fullscreen: {}", Borderless.isInNativeFullscreen(window));
-
-        if (fullscreenMode == null) {
-            LOG.error("Unexpected null value for fullscreen mode");
-            return;
-        }
-
-        if (fullscreenMode.shouldApply(window)) {
-            fullscreenMode.apply(window);
-        }
-
-        if (fullscreenMode.shouldReset(window)) {
-            fullscreenMode.reset(window);
-        }
+        Borderless.updateFullscreenMode(window);
     }
 
 }
