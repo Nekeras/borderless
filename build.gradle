@@ -132,3 +132,9 @@ publishing {
     }
 }
 
+task forceModsTomlRefresh(type: Delete) {
+    delete new File(sourceSets.main.output.resourcesDir, '/META-INF/mods.toml')
+}
+
+processResources.dependsOn forceModsTomlRefresh
+
