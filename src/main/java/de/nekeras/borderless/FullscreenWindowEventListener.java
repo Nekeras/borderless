@@ -4,9 +4,6 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import de.nekeras.borderless.fullscreen.FullscreenMode;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;

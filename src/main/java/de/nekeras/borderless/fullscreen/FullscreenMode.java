@@ -9,12 +9,18 @@ public interface FullscreenMode {
     /**
      * A {@link BorderlessFullscreen} in a windowed mode.
      */
-    FullscreenMode BORDERLESS = new BorderlessFullscreen();
+    BorderlessFullscreen BORDERLESS = new BorderlessFullscreen();
+
+    /**
+     * A {@link NativeFullscreen} as supported natively by Minecraft, but with disabled
+     * {@link org.lwjgl.glfw.GLFW#GLFW_AUTO_ICONIFY}.
+     */
+    NativeNonIconfiyFullscreen NATIVE_NON_ICONFIY = new NativeNonIconfiyFullscreen();
 
     /**
      * A {@link NativeFullscreen} as supported natively by Minecraft.
      */
-    FullscreenMode NATIVE = new NativeFullscreen();
+    NativeFullscreen NATIVE = new NativeFullscreen();
 
     /**
      * Enters a window into this fullscreen mode. This method should only

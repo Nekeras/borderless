@@ -1,7 +1,6 @@
 package de.nekeras.borderless;
 
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,7 +36,7 @@ public class Borderless {
     public static final String MOD_ID = "borderless";
 
     private static final Logger LOG = LogManager.getLogger();
-    private static FullscreenMode fullscreenMode = FullscreenMode.BORDERLESS;
+    private static FullscreenMode fullscreenMode = FullscreenMode.NATIVE;
 
     public Borderless() {
         // Client dist only, make sure server is always compatible with this mod
@@ -49,6 +48,22 @@ public class Borderless {
     @SuppressWarnings("deprecation")
     @SubscribeEvent
     public static void onClientSetup(@Nullable FMLClientSetupEvent event) {
+        DesktopEnvironment environment = DesktopEnvironment.get();
+
+        switch (environment) {
+            case WINDOWS:
+                fullscreenMode = FullscreenMode.BORDERLESS;
+                break;
+            case X11:
+                fullscreenMode = FullscreenMode.NATIVE_NON_ICONFIY;
+                break;
+            case GENERIC:
+                fullscreenMode = FullscreenMode.NATIVE;
+                break;
+        }
+
+        LOG.info("Found desktop environment {}, using fullscreen mode {}", environment, fullscreenMode);
+
         LOG.info("Enqueue WindowEventListener update to main thread");
 
         DeferredWorkQueue.runLater(() -> {
@@ -95,7 +110,8 @@ public class Borderless {
         Borderless.fullscreenMode = Objects.requireNonNull(fullscreenMode);
 
         Minecraft minecraft = Minecraft.getInstance();
-        updateFullscreenMode(minecraft.getMainWindow());
+        MainWindow window = minecraft.getMainWindow();
+        updateFullscreenMode(window);
     }
 
     /**

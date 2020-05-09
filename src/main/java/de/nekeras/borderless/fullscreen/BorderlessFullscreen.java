@@ -32,7 +32,6 @@ public class BorderlessFullscreen implements FullscreenMode {
             videoMode.getWidth(), videoMode.getHeight(),
             monitor.getVirtualPosX(), monitor.getVirtualPosY());
 
-        GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE);
         GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_DECORATED, GLFW.GLFW_FALSE);
         GLFW.glfwSetWindowMonitor(window.getHandle(), 0, monitor.getVirtualPosX(),
             monitor.getVirtualPosY(), videoMode.getWidth(), videoMode.getHeight(),
