@@ -56,6 +56,7 @@ public enum DesktopEnvironment {
         }
 
         CURRENT = current;
+        LOG.info("Found desktop environment {}", CURRENT);
     }
 
     /**

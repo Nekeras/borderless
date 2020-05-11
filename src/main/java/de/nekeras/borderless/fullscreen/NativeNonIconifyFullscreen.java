@@ -3,7 +3,10 @@ package de.nekeras.borderless.fullscreen;
 import net.minecraft.client.MainWindow;
 import org.lwjgl.glfw.GLFW;
 
-public class NativeNonIconfiyFullscreen implements FullscreenMode {
+/**
+ * The native fullscreen mode, but without automatic iconify on focus loss of the window..
+ */
+public class NativeNonIconifyFullscreen implements FullscreenMode {
 
     @Override
     public void apply(MainWindow window) {
@@ -12,6 +15,7 @@ public class NativeNonIconfiyFullscreen implements FullscreenMode {
 
     @Override
     public void reset(MainWindow window) {
+
     }
 
     @Override
@@ -23,4 +27,5 @@ public class NativeNonIconfiyFullscreen implements FullscreenMode {
     public boolean shouldReset(MainWindow window) {
         return false;
     }
+
 }

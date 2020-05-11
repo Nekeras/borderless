@@ -1,26 +1,18 @@
 package de.nekeras.borderless.fullscreen;
 
 import de.nekeras.borderless.Borderless;
+import de.nekeras.borderless.DesktopEnvironment;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.renderer.IWindowEventListener;
 
+/**
+ * A fullscreen mode that can be applied for the Minecraft {@link MainWindow}. The {@link #apply(MainWindow)} method
+ * will be called every time the window enters fullscreen, the {@link #reset(MainWindow)} method every time the window
+ * leaves fullscreen. {@link #apply(MainWindow)} will only be called once {@link #shouldApply(MainWindow)} returns
+ * <code>true</code>, {@link #reset(MainWindow)} will only be called once {@link #shouldReset(MainWindow)} returns
+ * <code>true</code>.
+ */
 public interface FullscreenMode {
-
-    /**
-     * A {@link BorderlessFullscreen} in a windowed mode.
-     */
-    BorderlessFullscreen BORDERLESS = new BorderlessFullscreen();
-
-    /**
-     * A {@link NativeFullscreen} as supported natively by Minecraft, but with disabled
-     * {@link org.lwjgl.glfw.GLFW#GLFW_AUTO_ICONIFY}.
-     */
-    NativeNonIconfiyFullscreen NATIVE_NON_ICONFIY = new NativeNonIconfiyFullscreen();
-
-    /**
-     * A {@link NativeFullscreen} as supported natively by Minecraft.
-     */
-    NativeFullscreen NATIVE = new NativeFullscreen();
 
     /**
      * Enters a window into this fullscreen mode. This method should only
@@ -62,6 +54,24 @@ public interface FullscreenMode {
      */
     default boolean shouldReset(MainWindow window) {
         return !window.isFullscreen();
+    }
+
+    /**
+     * Gets the default fullscreen mode for the specified operating system.
+     *
+     * @param environment The desktop environment of the operating system
+     * @return The fullscreen mode
+     */
+    static FullscreenMode getDefault(DesktopEnvironment environment) {
+        switch (environment) {
+            case WINDOWS:
+                return new BorderlessFullscreen();
+            case X11:
+                return new NativeNonIconifyFullscreen();
+            case GENERIC:
+            default:
+                return new NativeFullscreen();
+        }
     }
 
 }

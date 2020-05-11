@@ -5,6 +5,11 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import de.nekeras.borderless.config.Config;
+import de.nekeras.borderless.config.FullscreenModeConfig;
+import de.nekeras.borderless.fullscreen.BorderlessFullscreen;
+import de.nekeras.borderless.fullscreen.NativeFullscreen;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,33 +41,22 @@ public class Borderless {
     public static final String MOD_ID = "borderless";
 
     private static final Logger LOG = LogManager.getLogger();
-    private static FullscreenMode fullscreenMode = FullscreenMode.NATIVE;
+    private static FullscreenMode fullscreenMode;
 
     public Borderless() {
         // Client dist only, make sure server is always compatible with this mod
-        ModLoadingContext.get().registerExtensionPoint(
-            ExtensionPoint.DISPLAYTEST,
-            () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+        ModLoadingContext context = ModLoadingContext.get();
+
+        context.registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(
+                () -> FMLNetworkConstants.IGNORESERVERONLY,
+                (a, b) -> true));
+        context.registerConfig(ModConfig.Type.CLIENT, Config.CONFIG_SPEC);
     }
 
     @SuppressWarnings("deprecation")
     @SubscribeEvent
     public static void onClientSetup(@Nullable FMLClientSetupEvent event) {
-        DesktopEnvironment environment = DesktopEnvironment.get();
-
-        switch (environment) {
-            case WINDOWS:
-                fullscreenMode = FullscreenMode.BORDERLESS;
-                break;
-            case X11:
-                fullscreenMode = FullscreenMode.NATIVE_NON_ICONFIY;
-                break;
-            case GENERIC:
-                fullscreenMode = FullscreenMode.NATIVE;
-                break;
-        }
-
-        LOG.info("Found desktop environment {}, using fullscreen mode {}", environment, fullscreenMode);
+        fullscreenMode = Config.GENERAL.fullscreenMode.get().newFullscreenMode();
 
         LOG.info("Enqueue WindowEventListener update to main thread");
 
@@ -73,8 +67,13 @@ public class Borderless {
             ReflectionUtil.updateWindowEventListener(window, FullscreenWindowEventListener::new);
             LOG.info("Overwrite finished");
 
-            updateFullscreenMode(window);
+            applyForWindow(window);
         });
+    }
+
+    @SubscribeEvent
+    public void onConfigReload(ModConfig.Reloading event) {
+        setFullscreenMode(Config.GENERAL.fullscreenMode.get().newFullscreenMode());
     }
 
     /**
@@ -111,7 +110,7 @@ public class Borderless {
 
         Minecraft minecraft = Minecraft.getInstance();
         MainWindow window = minecraft.getMainWindow();
-        updateFullscreenMode(window);
+        applyForWindow(window);
     }
 
     /**
@@ -119,7 +118,7 @@ public class Borderless {
      *
      * @param window The window to update
      */
-    public static void updateFullscreenMode(MainWindow window) {
+    public static void applyForWindow(MainWindow window) {
         if (fullscreenMode == null) {
             LOG.error("Unexpected null value for fullscreen mode");
             return;

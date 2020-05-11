@@ -1,6 +1,7 @@
 package de.nekeras.borderless.fullscreen;
 
 import net.minecraft.client.MainWindow;
+import org.lwjgl.glfw.GLFW;
 
 /**
  * The native fullscreen mode, this fullscreen mode can be used to disable this mod, as this mode
@@ -10,6 +11,7 @@ public class NativeFullscreen implements FullscreenMode {
 
     @Override
     public void apply(MainWindow window) {
+        GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_TRUE);
     }
 
     @Override
@@ -18,7 +20,7 @@ public class NativeFullscreen implements FullscreenMode {
 
     @Override
     public boolean shouldApply(MainWindow window) {
-        return false;
+        return GLFW.glfwGetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY) != GLFW.GLFW_TRUE;
     }
 
     @Override
