@@ -1,0 +1,14 @@
+{
+  "borderless.config.title": "Borderless Window Config",
+  "borderless.config.fullscreen_mode": "Fullscreen Mode",
+  "borderless.config.fullscreen_mode.default": "Default",
+  "borderless.config.fullscreen_mode.default.description": "Picks the best fullscreen mode for the current operating system, this is the recommended option.",
+  "borderless.config.fullscreen_mode.borderless": "Borderless",
+  "borderless.config.fullscreen_mode.borderless.description": "A borderless fullscreen which sets the width and height of the window to the monitor's video mode and removing window borders.",
+  "borderless.config.fullscreen_mode.native": "Native",
+  "borderless.config.fullscreen_mode.native.description": "Resets the monitor's video mode to match the window. This is the standard fullscreen mode of Minecraft which minimizes the window on focus loss.",
+  "borderless.config.fullscreen_mode.native_non_iconify": "Native without Iconify",
+  "borderless.config.fullscreen_mode.native_non_iconify.description": "The same as Native, but without the window minimizing once it is not focused. Note: The window may be always on top, depending on the operating system.",
+  "borderless.config.fullscreen_mode.native_hybrid": "Native Hybrid",
+  "borderless.config.fullscreen_mode.native_hybrid.description": "The same as Native, but the window will switch to a windowed mode once the window is not focused.  When focus is gained again, switches back to fullscreen."
+}

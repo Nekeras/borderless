@@ -1,21 +1,11 @@
 package de.nekeras.borderless;
 
+import de.nekeras.borderless.config.Config;
+import de.nekeras.borderless.config.ConfigScreen;
+import de.nekeras.borderless.fullscreen.FullscreenMode;
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import de.nekeras.borderless.config.Config;
-import de.nekeras.borderless.config.FullscreenModeConfig;
-import de.nekeras.borderless.fullscreen.BorderlessFullscreen;
-import de.nekeras.borderless.fullscreen.NativeFullscreen;
-import net.minecraftforge.fml.config.ModConfig;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
-
-import de.nekeras.borderless.fullscreen.FullscreenMode;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,8 +15,13 @@ import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.network.FMLNetworkConstants;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 
 /**
  * The main Forge mod class.
@@ -44,13 +39,17 @@ public class Borderless {
     private static FullscreenMode fullscreenMode;
 
     public Borderless() {
-        // Client dist only, make sure server is always compatible with this mod
         ModLoadingContext context = ModLoadingContext.get();
 
+        // Client dist only, make sure server is always compatible with this mod
         context.registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(
-                () -> FMLNetworkConstants.IGNORESERVERONLY,
-                (a, b) -> true));
+            () -> FMLNetworkConstants.IGNORESERVERONLY,
+            (a, b) -> true));
+
+        // Config registration
         context.registerConfig(ModConfig.Type.CLIENT, Config.CONFIG_SPEC);
+        context.registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY,
+            () -> (mc, modListScreen) -> new ConfigScreen(modListScreen));
     }
 
     @SuppressWarnings("deprecation")
@@ -103,7 +102,8 @@ public class Borderless {
      * The fullscreen mode that is applied instead of the native fullscreen once the user hits
      * F11 or switches to fullscreen in the video settings.
      *
-     * @param fullscreenMode The fullscreen mode
+     * @param fullscreenMode
+     *     The fullscreen mode
      */
     public static void setFullscreenMode(@Nonnull FullscreenMode fullscreenMode) {
         Borderless.fullscreenMode = Objects.requireNonNull(fullscreenMode);
@@ -116,7 +116,8 @@ public class Borderless {
     /**
      * Triggers an update for current {@link FullscreenMode} on the given {@link MainWindow}.
      *
-     * @param window The window to update
+     * @param window
+     *     The window to update
      */
     public static void applyForWindow(MainWindow window) {
         if (fullscreenMode == null) {

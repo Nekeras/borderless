@@ -1,8 +1,7 @@
 package de.nekeras.borderless.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-
 import java.util.Arrays;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class Config {
 
@@ -20,10 +19,10 @@ public class Config {
             builder.push("general");
 
             fullscreenMode = builder
-                    .comment(Arrays.stream(FullscreenModeConfig.values())
-                            .map(mode -> String.format("%s - %s", mode.name(), mode.getComment()))
-                            .toArray(String[]::new))
-                    .defineEnum("fullscreenMode", FullscreenModeConfig.DEFAULT);
+                .comment(Arrays.stream(FullscreenModeConfig.values())
+                    .map(mode -> String.format("%s - %s", mode.name(), mode.getComment()))
+                    .toArray(String[]::new))
+                .defineEnum("fullscreenMode", FullscreenModeConfig.DEFAULT);
 
             builder.pop();
         }
