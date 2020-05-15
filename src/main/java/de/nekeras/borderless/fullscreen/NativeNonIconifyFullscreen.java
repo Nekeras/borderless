@@ -4,7 +4,7 @@ import net.minecraft.client.MainWindow;
 import org.lwjgl.glfw.GLFW;
 
 /**
- * The native fullscreen mode, but without automatic iconify on focus loss of the window..
+ * The native fullscreen mode, but without automatic iconify on focus loss of the window.
  */
 public class NativeNonIconifyFullscreen implements FullscreenMode {
 
@@ -20,7 +20,8 @@ public class NativeNonIconifyFullscreen implements FullscreenMode {
 
     @Override
     public boolean shouldApply(MainWindow window) {
-        return GLFW.glfwGetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY) != GLFW.GLFW_FALSE;
+        return GLFW.glfwGetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY)
+            != GLFW.GLFW_FALSE;
     }
 
     @Override

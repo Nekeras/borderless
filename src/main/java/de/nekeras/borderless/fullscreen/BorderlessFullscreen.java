@@ -1,15 +1,14 @@
 package de.nekeras.borderless.fullscreen;
 
+import net.minecraft.client.MainWindow;
+import net.minecraft.client.Monitor;
+import net.minecraft.client.renderer.VideoMode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Monitor;
-import net.minecraft.client.renderer.VideoMode;
-
 /**
- * Switches into a windowed mode and removes the borders from the window. After that, maximizes the
+ * Switches into a windowed mode and removes the borders of the window. After that, maximizes the
  * window on the current monitor as returned by {@link MainWindow#getMonitor()}.
  */
 public class BorderlessFullscreen implements FullscreenMode {
@@ -27,7 +26,8 @@ public class BorderlessFullscreen implements FullscreenMode {
 
         VideoMode videoMode = monitor.getDefaultVideoMode();
 
-        LOG.info("Entering borderless fullscreen on monitor 0x{} with resolution {}x{} at position {}|{}",
+        LOG.info(
+            "Entering borderless fullscreen on monitor 0x{} with resolution {}x{} at position {}|{}",
             Long.toHexString(monitor.getMonitorPointer()),
             videoMode.getWidth(), videoMode.getHeight(),
             monitor.getVirtualPosX(), monitor.getVirtualPosY());

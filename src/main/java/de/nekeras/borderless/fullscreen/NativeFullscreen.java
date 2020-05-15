@@ -20,7 +20,8 @@ public class NativeFullscreen implements FullscreenMode {
 
     @Override
     public boolean shouldApply(MainWindow window) {
-        return GLFW.glfwGetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY) != GLFW.GLFW_TRUE;
+        return GLFW.glfwGetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY)
+            != GLFW.GLFW_TRUE;
     }
 
     @Override

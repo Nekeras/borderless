@@ -23,10 +23,6 @@ public class EnumOption<E extends Enum<E>> extends AbstractOption {
         this.valueHolder = holder;
     }
 
-    public Class<E> getEnumClass() {
-        return enumClass;
-    }
-
     public E getValue() {
         return valueHolder.get();
     }
@@ -43,24 +39,23 @@ public class EnumOption<E extends Enum<E>> extends AbstractOption {
         throw new IndexOutOfBoundsException();
     }
 
-    public void setValue(@Nonnull E value) {
-        valueHolder.set(value);
-    }
-
-    public void setValueIndex(int index) {
-        setValue(enumClass.getEnumConstants()[index]);
-    }
-
     public String getText() {
-        return getDisplayString() + I18n.format(getValue().toString());
+        return getText(valueHolder.get());
+    }
+
+    public String getText(E value) {
+        return getDisplayString() + I18n.format(value.toString());
     }
 
     @Nonnull
     @Override
     public Widget createWidget(@Nonnull GameSettings options, int x, int y, int width) {
         return new OptionButton(x, y, width, BUTTON_HEIGHT, this, getText(), (p_216721_2_) -> {
-            setValueIndex((getValueIndex() + 1) % values.length);
-            p_216721_2_.setMessage(getText());
+            int index = (getValueIndex() + 1) % enumClass.getEnumConstants().length;
+            E value = enumClass.getEnumConstants()[index];
+
+            valueHolder.set(value);
+            p_216721_2_.setMessage(getText(value));
         });
     }
 

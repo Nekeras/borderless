@@ -14,6 +14,7 @@ public class Config {
     public static class General {
 
         public final ForgeConfigSpec.EnumValue<FullscreenModeConfig> fullscreenMode;
+        public final ForgeConfigSpec.EnumValue<FocusLossConfig> focusLoss;
 
         public General(ForgeConfigSpec.Builder builder) {
             builder.push("general");
@@ -22,7 +23,13 @@ public class Config {
                 .comment(Arrays.stream(FullscreenModeConfig.values())
                     .map(mode -> String.format("%s - %s", mode.name(), mode.getComment()))
                     .toArray(String[]::new))
-                .defineEnum("fullscreenMode", FullscreenModeConfig.DEFAULT);
+                .defineEnum("fullscreenMode", FullscreenModeConfig.BEST);
+
+            focusLoss = builder
+                .comment(Arrays.stream(FocusLossConfig.values())
+                    .map(mode -> String.format("%s - %s", mode.name(), mode.getComment()))
+                    .toArray(String[]::new))
+                .defineEnum("focusLoss", FocusLossConfig.MINIMIZE);
 
             builder.pop();
         }

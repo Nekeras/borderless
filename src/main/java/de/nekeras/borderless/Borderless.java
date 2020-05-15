@@ -55,7 +55,7 @@ public class Borderless {
     @SuppressWarnings("deprecation")
     @SubscribeEvent
     public static void onClientSetup(@Nullable FMLClientSetupEvent event) {
-        fullscreenMode = Config.GENERAL.fullscreenMode.get().newFullscreenMode();
+        fullscreenMode = FullscreenMode.fromConfig();
 
         LOG.info("Enqueue WindowEventListener update to main thread");
 
@@ -72,7 +72,7 @@ public class Borderless {
 
     @SubscribeEvent
     public void onConfigReload(ModConfig.Reloading event) {
-        setFullscreenMode(Config.GENERAL.fullscreenMode.get().newFullscreenMode());
+        setFullscreenMode(FullscreenMode.fromConfig());
     }
 
     /**
