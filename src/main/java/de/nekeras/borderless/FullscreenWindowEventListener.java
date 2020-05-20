@@ -40,8 +40,7 @@ public class FullscreenWindowEventListener implements IWindowEventListener {
             return;
         }
 
-        MainWindow window = Minecraft.getInstance().getMainWindow();
-        Borderless.applyForWindow(window);
+        Borderless.forceFullscreenModeUpdate();
     }
 
 }

@@ -43,7 +43,6 @@ public class BorderlessFullscreen implements FullscreenMode {
         LOG.info("Leaving borderless fullscreen and resetting window size");
 
         GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_DECORATED, GLFW.GLFW_TRUE);
-        GLFW.glfwSetWindowSize(window.getHandle(), window.getWidth(), window.getHeight());
     }
 
 }

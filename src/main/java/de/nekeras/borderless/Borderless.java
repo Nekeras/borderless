@@ -66,7 +66,7 @@ public class Borderless {
             ReflectionUtil.updateWindowEventListener(window, FullscreenWindowEventListener::new);
             LOG.info("Overwrite finished");
 
-            applyForWindow(window);
+            forceFullscreenModeUpdate();
         });
     }
 
@@ -106,42 +106,32 @@ public class Borderless {
      *     The fullscreen mode
      */
     public static void setFullscreenMode(@Nonnull FullscreenMode fullscreenMode) {
-        Borderless.fullscreenMode = Objects.requireNonNull(fullscreenMode);
+        Objects.requireNonNull(fullscreenMode);
 
         Minecraft minecraft = Minecraft.getInstance();
         MainWindow window = minecraft.getMainWindow();
-        applyForWindow(window);
-    }
 
-    /**
-     * Triggers an update for current {@link FullscreenMode} on the given {@link MainWindow}.
-     *
-     * @param window
-     *     The window to update
-     */
-    public static void applyForWindow(MainWindow window) {
-        if (fullscreenMode == null) {
-            LOG.error("Unexpected null value for fullscreen mode");
-            return;
-        }
-
-        LOG.info("Updating fullscreen mode '{}' - Window fullscreen: {}; Native fullscreen: {}",
-            fullscreenMode.getClass().getName(),
+        LOG.info("Resetting fullscreen mode '{}' - Window fullscreen: {}; Native fullscreen: {}",
+            Borderless.fullscreenMode.getClass().getName(),
             window.isFullscreen(),
             isInNativeFullscreen(window));
 
-        boolean shouldApply = fullscreenMode.shouldApply(window);
-        boolean shouldReset = fullscreenMode.shouldReset(window);
-
-        LOG.info("Fullscreen mode - shouldApply: {}; shouldReset: {}", shouldApply, shouldReset);
-
-        if (shouldApply) {
-            fullscreenMode.apply(window);
+        if (Borderless.fullscreenMode != null && !Borderless.fullscreenMode.equals(fullscreenMode)) {
+            Borderless.fullscreenMode.reset(window);
         }
 
-        if (shouldReset) {
-            fullscreenMode.reset(window);
+        if (window.isFullscreen()) {
+            LOG.info("Applying fullscreen mode '{}'", fullscreenMode.getClass().getName());
+            Borderless.fullscreenMode = fullscreenMode;
+            Borderless.fullscreenMode.apply(window);
         }
+    }
+
+    /**
+     * Triggers an update for current {@link FullscreenMode}.
+     */
+    public static void forceFullscreenModeUpdate() {
+        setFullscreenMode(getFullscreenMode());
     }
 
 }
