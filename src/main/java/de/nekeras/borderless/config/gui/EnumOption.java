@@ -1,6 +1,8 @@
-package de.nekeras.borderless.config;
+package de.nekeras.borderless.config.gui;
 
 import javax.annotation.Nonnull;
+
+import de.nekeras.borderless.config.value.ValueHolder;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.OptionButton;

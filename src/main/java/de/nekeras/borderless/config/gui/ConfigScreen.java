@@ -1,6 +1,9 @@
-package de.nekeras.borderless.config;
+package de.nekeras.borderless.config.gui;
 
 import javax.annotation.Nonnull;
+
+import de.nekeras.borderless.config.FocusLossConfig;
+import de.nekeras.borderless.config.FullscreenModeConfig;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;

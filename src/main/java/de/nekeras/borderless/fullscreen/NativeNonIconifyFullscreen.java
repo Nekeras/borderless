@@ -18,15 +18,4 @@ public class NativeNonIconifyFullscreen implements FullscreenMode {
         GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_TRUE);
     }
 
-    @Override
-    public boolean shouldApply(MainWindow window) {
-        return GLFW.glfwGetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY)
-            != GLFW.GLFW_FALSE;
-    }
-
-    @Override
-    public boolean shouldReset(MainWindow window) {
-        return false;
-    }
-
 }

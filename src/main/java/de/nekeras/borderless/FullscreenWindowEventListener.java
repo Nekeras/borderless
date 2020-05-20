@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 
 import de.nekeras.borderless.fullscreen.FullscreenMode;
 import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IWindowEventListener;
 
 /**

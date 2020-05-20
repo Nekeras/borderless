@@ -1,11 +1,18 @@
 package de.nekeras.borderless;
 
-import de.nekeras.borderless.config.Config;
-import de.nekeras.borderless.config.ConfigScreen;
-import de.nekeras.borderless.fullscreen.FullscreenMode;
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
+
+import de.nekeras.borderless.config.Config;
+import de.nekeras.borderless.config.gui.ConfigScreen;
+import de.nekeras.borderless.fullscreen.FullscreenMode;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,10 +25,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.network.FMLNetworkConstants;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * The main Forge mod class.
@@ -35,7 +38,7 @@ public class Borderless {
      */
     public static final String MOD_ID = "borderless";
 
-    private static final Logger LOG = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger();
     private static FullscreenMode fullscreenMode;
 
     public Borderless() {
@@ -57,14 +60,14 @@ public class Borderless {
     public static void onClientSetup(@Nullable FMLClientSetupEvent event) {
         fullscreenMode = FullscreenMode.fromConfig();
 
-        LOG.info("Enqueue WindowEventListener update to main thread");
+        log.info("Enqueue WindowEventListener update to main thread");
 
         DeferredWorkQueue.runLater(() -> {
-            LOG.info("Overwriting Minecraft WindowEventListener");
+            log.info("Overwriting Minecraft WindowEventListener");
             Minecraft minecraft = Minecraft.getInstance();
             MainWindow window = minecraft.getMainWindow();
             ReflectionUtil.updateWindowEventListener(window, FullscreenWindowEventListener::new);
-            LOG.info("Overwrite finished");
+            log.info("Overwrite finished");
 
             forceFullscreenModeUpdate();
         });
@@ -111,17 +114,18 @@ public class Borderless {
         Minecraft minecraft = Minecraft.getInstance();
         MainWindow window = minecraft.getMainWindow();
 
-        LOG.info("Resetting fullscreen mode '{}' - Window fullscreen: {}; Native fullscreen: {}",
+        log.info("Resetting fullscreen mode '{}' - Window fullscreen: {}; Native fullscreen: {}",
             Borderless.fullscreenMode.getClass().getName(),
             window.isFullscreen(),
             isInNativeFullscreen(window));
 
-        if (Borderless.fullscreenMode != null && !Borderless.fullscreenMode.equals(fullscreenMode)) {
+        if (Borderless.fullscreenMode != null && !Borderless.fullscreenMode
+            .equals(fullscreenMode)) {
             Borderless.fullscreenMode.reset(window);
         }
 
         if (window.isFullscreen()) {
-            LOG.info("Applying fullscreen mode '{}'", fullscreenMode.getClass().getName());
+            log.info("Applying fullscreen mode '{}'", fullscreenMode.getClass().getName());
             Borderless.fullscreenMode = fullscreenMode;
             Borderless.fullscreenMode.apply(window);
         }

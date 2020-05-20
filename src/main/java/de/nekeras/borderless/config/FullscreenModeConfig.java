@@ -1,7 +1,6 @@
 package de.nekeras.borderless.config;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * An enum storing all supported fullscreen modes that can be configured in the {@link Config}.
@@ -31,23 +30,14 @@ public enum FullscreenModeConfig {
 
     ;
 
-    private static final String BASE_KEY = "borderless.config.fullscreen_mode.";
-    private static final String KEY_DESCRIPTION_EXTENSION = ".description";
+    private static final String BASE_KEY = "borderless.config.fullscreen_mode.%s";
 
     private final String comment;
     private final String titleKey;
-    private final String descriptionKey;
 
     FullscreenModeConfig(@Nonnull String comment) {
-        this(comment, null, null);
-    }
-
-    FullscreenModeConfig(@Nonnull String comment, @Nullable String titleKey,
-        @Nullable String descriptionKey) {
         this.comment = comment;
-        this.titleKey = titleKey == null ? BASE_KEY + name().toLowerCase() : titleKey;
-        this.descriptionKey =
-            descriptionKey == null ? this.titleKey + KEY_DESCRIPTION_EXTENSION : descriptionKey;
+        this.titleKey = String.format(BASE_KEY, name().toLowerCase());
     }
 
     /**
@@ -57,14 +47,6 @@ public enum FullscreenModeConfig {
      */
     public String getComment() {
         return comment;
-    }
-
-    public String getTitleKey() {
-        return titleKey;
-    }
-
-    public String getDescriptionKey() {
-        return descriptionKey;
     }
 
     @Override

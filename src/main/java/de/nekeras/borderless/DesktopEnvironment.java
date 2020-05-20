@@ -1,9 +1,10 @@
 package de.nekeras.borderless;
 
-import de.nekeras.borderless.fullscreen.NativeFullscreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.Platform;
+
+import de.nekeras.borderless.fullscreen.NativeFullscreen;
 
 /**
  * The desktop environment we are running on, retrievable by {@link #get()}.
@@ -26,11 +27,11 @@ public enum DesktopEnvironment {
     GENERIC;
 
     private static final String LINUX_WINDOW_SYSTEM_VARIABLE = "XDG_SESSION_TYPE";
-    private static final Logger LOG = LogManager.getLogger();
     private static final DesktopEnvironment CURRENT;
+    private static final Logger log = LogManager.getLogger();
 
     static {
-        LOG.info("Determining desktop environment");
+        log.info("Determining desktop environment");
 
         DesktopEnvironment current = null;
 
@@ -46,7 +47,7 @@ public enum DesktopEnvironment {
                 } else {
                     // Also treats Wayland as unknown as this seems buggy with LWJGL
                     current = GENERIC;
-                    LOG.warn("Unknown window system: {}", result);
+                    log.warn("Unknown window system: {}", result);
                 }
 
                 break;
@@ -56,7 +57,7 @@ public enum DesktopEnvironment {
         }
 
         CURRENT = current;
-        LOG.info("Found desktop environment {}", CURRENT);
+        log.info("Found desktop environment {}", CURRENT);
     }
 
     /**
