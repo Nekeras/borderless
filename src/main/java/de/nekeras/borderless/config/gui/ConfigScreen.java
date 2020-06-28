@@ -1,12 +1,15 @@
 package de.nekeras.borderless.config.gui;
 
+import javax.annotation.Nonnull;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import de.nekeras.borderless.config.FocusLossConfig;
 import de.nekeras.borderless.config.FullscreenModeConfig;
-import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,78 +36,89 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    protected void init() {
-        assert minecraft != null;
-        super.init();
+    protected void func_231160_c_() {
+        // init
+        super.func_231160_c_();
 
+        Minecraft minecraft = Minecraft.getInstance();
         int x = getHorizontalLayoutStart();
+        int width = field_230708_k_;
+        int height = field_230709_l_;
 
-        addButton(
+        func_230480_a_(
             ConfigScreenOption.FULLSCREEN_MODE.createWidget(minecraft.gameSettings,
                 x, LINE_HEIGHT * 2, LAYOUT_MAX_WIDTH));
 
         focusLossButton =
-            addButton(ConfigScreenOption.FOCUS_LOSS.createWidget(minecraft.gameSettings,
+            func_230480_a_(ConfigScreenOption.FOCUS_LOSS.createWidget(minecraft.gameSettings,
                 x, LINE_HEIGHT * 3, LAYOUT_MAX_WIDTH));
 
-        addButton(new Button((width - 100) / 2, height - 75, 100, 20,
-            I18n.format("gui.done"), b -> onClose()));
+        func_230480_a_(new Button((width - 100) / 2, height - 75, 100, 20,
+            new TranslationTextComponent("gui.done"), b -> onClose()));
     }
 
     @Override
-    public void tick() {
-        assert minecraft != null;
-        super.tick();
+    public void func_231023_e_() {
+        // Tick
+        super.func_231023_e_();
 
-        focusLossButton.visible =
+        // visible
+        focusLossButton.field_230694_p_ =
             ConfigScreenOption.FULLSCREEN_MODE.getValue() == FullscreenModeConfig.NATIVE;
     }
 
     @Override
-    public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-        renderBackground();
-        renderTitle();
-        renderDescription();
-        renderChangedWarning();
+    public void func_230430_a_(@Nonnull MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_,
+        float p_230430_4_) {
+        // render
 
-        super.render(p_render_1_, p_render_2_, p_render_3_);
+        Minecraft minecraft = Minecraft.getInstance();
+        int width = field_230708_k_;
+        int height = field_230709_l_;
+
+        // renderBackground
+        this.func_230446_a_(p_230430_1_);
+
+        renderTitle(p_230430_1_, minecraft, width, height);
+        renderDescription(p_230430_1_, minecraft, width, height);
+        renderChangedWarning(p_230430_1_, minecraft, width, height);
+
+        super.func_230430_a_(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
     }
 
     @Override
-    public void onClose() {
-        assert minecraft != null;
-        super.onClose();
-
-        minecraft.displayGuiScreen(parent);
+    public void func_231175_as__() {
+        // onClose
+        super.func_231175_as__();
+        Minecraft.getInstance().displayGuiScreen(parent);
     }
 
-    private void renderTitle() {
-        assert minecraft != null;
-
+    private void renderTitle(MatrixStack matrixStack, Minecraft minecraft, int width, int height) {
         int x = width / 2;
         int y = LINE_HEIGHT;
 
-        drawCenteredString(minecraft.fontRenderer, title.getFormattedText(), x, 20, WHITE);
+        // drawCenteredString
+        func_238471_a_(matrixStack, minecraft.fontRenderer, field_230704_d_.getString(), width / 2,
+            20,
+            0xffffff);
     }
 
-    private void renderDescription() {
-        assert minecraft != null;
-
-        int x = getHorizontalLayoutStart();
+    private void renderDescription(MatrixStack matrixStack, Minecraft minecraft, int width, int height) {
+        int x = getHorizontalLayoutStart(width);
         int y = LINE_HEIGHT * 4;
 
+        // drawSplitString
         minecraft.fontRenderer
-            .drawSplitString(I18n.format(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
+            .func_238418_a_(new TranslationTextComponent(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
     }
 
-    private void renderChangedWarning() {
-        assert minecraft != null;
-
-        int x = getHorizontalLayoutStart();
+    private void renderChangedWarning(MatrixStack matrixStack, Minecraft minecraft, int width, int height) {
+        int x = getHorizontalLayoutStart(width);
         int y = height - 50;
 
+        // drawSplitString
         minecraft.fontRenderer
-            .drawSplitString(I18n.format(CHANGED_WARNING_KEY), x, y, LAYOUT_MAX_WIDTH, YELLOW);
+            .func_238418_a_(new TranslationTextComponent(CHANGED_WARNING_KEY), x, y, LAYOUT_MAX_WIDTH, YELLOW);
     }
 
     private String getDescriptionKey() {
@@ -120,11 +134,11 @@ public class ConfigScreen extends Screen {
         }
     }
 
-    private int getHorizontalLayoutStart() {
+    private int getHorizontalLayoutStart(int width) {
         return (width - LAYOUT_MAX_WIDTH) / 2;
     }
 
-    private int getVerticalCenter() {
+    private int getVerticalCenter(int height) {
         return height / 2;
     }
 

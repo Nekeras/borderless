@@ -42,4 +42,9 @@ public class FullscreenWindowEventListener implements IWindowEventListener {
         Borderless.forceFullscreenModeUpdate();
     }
 
+    @Override
+    public void func_241216_b_() {
+        defaultWindowEventListener.func_241216_b_();
+    }
+
 }

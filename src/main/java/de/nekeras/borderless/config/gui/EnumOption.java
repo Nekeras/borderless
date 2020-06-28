@@ -3,11 +3,12 @@ package de.nekeras.borderless.config.gui;
 import javax.annotation.Nonnull;
 
 import de.nekeras.borderless.config.value.ValueHolder;
+import net.minecraft.client.AbstractOption;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.OptionButton;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.settings.AbstractOption;
+import net.minecraft.util.text.IFormattableTextComponent;
 
 public class EnumOption<E extends Enum<E>> extends AbstractOption {
 
@@ -41,12 +42,12 @@ public class EnumOption<E extends Enum<E>> extends AbstractOption {
         throw new IndexOutOfBoundsException();
     }
 
-    public String getText() {
+    public IFormattableTextComponent getText() {
         return getText(valueHolder.get());
     }
 
-    public String getText(E value) {
-        return getDisplayString() + I18n.format(value.toString());
+    public IFormattableTextComponent getText(E value) {
+        return func_238238_a_().func_240702_b_(I18n.format(value.toString()));
     }
 
     @Nonnull
@@ -57,7 +58,7 @@ public class EnumOption<E extends Enum<E>> extends AbstractOption {
             E value = enumClass.getEnumConstants()[index];
 
             valueHolder.set(value);
-            p_216721_2_.setMessage(getText(value));
+            p_216721_2_.func_238482_a_(getText(value));
         });
     }
 

@@ -113,21 +113,21 @@ public class Borderless {
 
         Minecraft minecraft = Minecraft.getInstance();
         MainWindow window = minecraft.getMainWindow();
+        FullscreenMode currentFullscreenMode = Borderless.getFullscreenMode();
 
         log.info("Resetting fullscreen mode '{}' - Window fullscreen: {}; Native fullscreen: {}",
-            Borderless.fullscreenMode.getClass().getName(),
+            currentFullscreenMode == null ? null : currentFullscreenMode.getClass().getName(),
             window.isFullscreen(),
             isInNativeFullscreen(window));
 
-        if (Borderless.fullscreenMode != null && !Borderless.fullscreenMode
-            .equals(fullscreenMode)) {
-            Borderless.fullscreenMode.reset(window);
+        if (currentFullscreenMode != null) {
+            currentFullscreenMode.reset(window);
         }
 
         if (window.isFullscreen()) {
             log.info("Applying fullscreen mode '{}'", fullscreenMode.getClass().getName());
             Borderless.fullscreenMode = fullscreenMode;
-            Borderless.fullscreenMode.apply(window);
+            fullscreenMode.apply(window);
         }
     }
 
