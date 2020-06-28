@@ -41,9 +41,9 @@ public class ConfigScreen extends Screen {
         super.func_231160_c_();
 
         Minecraft minecraft = Minecraft.getInstance();
-        int x = getHorizontalLayoutStart();
         int width = field_230708_k_;
         int height = field_230709_l_;
+        int x = getHorizontalLayoutStart(width);
 
         func_230480_a_(
             ConfigScreenOption.FULLSCREEN_MODE.createWidget(minecraft.gameSettings,
@@ -54,7 +54,7 @@ public class ConfigScreen extends Screen {
                 x, LINE_HEIGHT * 3, LAYOUT_MAX_WIDTH));
 
         func_230480_a_(new Button((width - 100) / 2, height - 75, 100, 20,
-            new TranslationTextComponent("gui.done"), b -> onClose()));
+            new TranslationTextComponent("gui.done"), b -> func_231175_as__()));
     }
 
     @Override
@@ -71,7 +71,6 @@ public class ConfigScreen extends Screen {
     public void func_230430_a_(@Nonnull MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_,
         float p_230430_4_) {
         // render
-
         Minecraft minecraft = Minecraft.getInstance();
         int width = field_230708_k_;
         int height = field_230709_l_;
@@ -98,27 +97,31 @@ public class ConfigScreen extends Screen {
         int y = LINE_HEIGHT;
 
         // drawCenteredString
-        func_238471_a_(matrixStack, minecraft.fontRenderer, field_230704_d_.getString(), width / 2,
+        func_238472_a_(matrixStack, minecraft.fontRenderer, field_230704_d_, width / 2,
             20,
             0xffffff);
     }
 
-    private void renderDescription(MatrixStack matrixStack, Minecraft minecraft, int width, int height) {
+    private void renderDescription(MatrixStack matrixStack, Minecraft minecraft, int width,
+        int height) {
         int x = getHorizontalLayoutStart(width);
         int y = LINE_HEIGHT * 4;
 
         // drawSplitString
         minecraft.fontRenderer
-            .func_238418_a_(new TranslationTextComponent(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
+            .func_238418_a_(new TranslationTextComponent(getDescriptionKey()), x, y,
+                LAYOUT_MAX_WIDTH, WHITE);
     }
 
-    private void renderChangedWarning(MatrixStack matrixStack, Minecraft minecraft, int width, int height) {
+    private void renderChangedWarning(MatrixStack matrixStack, Minecraft minecraft, int width,
+        int height) {
         int x = getHorizontalLayoutStart(width);
         int y = height - 50;
 
         // drawSplitString
         minecraft.fontRenderer
-            .func_238418_a_(new TranslationTextComponent(CHANGED_WARNING_KEY), x, y, LAYOUT_MAX_WIDTH, YELLOW);
+            .func_238418_a_(new TranslationTextComponent(CHANGED_WARNING_KEY), x, y,
+                LAYOUT_MAX_WIDTH, YELLOW);
     }
 
     private String getDescriptionKey() {
@@ -136,10 +139,6 @@ public class ConfigScreen extends Screen {
 
     private int getHorizontalLayoutStart(int width) {
         return (width - LAYOUT_MAX_WIDTH) / 2;
-    }
-
-    private int getVerticalCenter(int height) {
-        return height / 2;
     }
 
 }
