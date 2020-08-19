@@ -7,8 +7,8 @@ import net.minecraft.client.AbstractOption;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.OptionButton;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class EnumOption<E extends Enum<E>> extends AbstractOption {
 
@@ -42,12 +42,12 @@ public class EnumOption<E extends Enum<E>> extends AbstractOption {
         throw new IndexOutOfBoundsException();
     }
 
-    public IFormattableTextComponent getText() {
+    public ITextComponent getText() {
         return getText(valueHolder.get());
     }
 
-    public IFormattableTextComponent getText(E value) {
-        return func_238238_a_().func_240702_b_(I18n.format(value.toString()));
+    public ITextComponent getText(E value) {
+        return func_243222_a(new TranslationTextComponent(value.toString()));
     }
 
     @Nonnull
