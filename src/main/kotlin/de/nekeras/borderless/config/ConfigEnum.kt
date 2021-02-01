@@ -13,5 +13,4 @@ interface ConfigEnum : Translatable {
      * An unlocalized comment describing this value.
      */
     val comment: String
-
 }

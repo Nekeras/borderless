@@ -1,11 +1,10 @@
 package de.nekeras.borderless
 
+import de.nekeras.borderless.extensions.logger
 import de.nekeras.borderless.fullscreen.BorderlessFullscreen
 import de.nekeras.borderless.fullscreen.FullscreenMode
 import de.nekeras.borderless.fullscreen.NativeFullscreen
 import de.nekeras.borderless.fullscreen.NativeNonIconifyFullscreen
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 import org.lwjgl.system.Platform
 
 /**
@@ -36,11 +35,11 @@ enum class DesktopEnvironment(val bestFullscreenMode: FullscreenMode) {
 
     companion object {
 
-        private const val LINUX_WINDOW_SYSTEM_VARIABLE = "XDG_SESSION_TYPE";
+        private const val LINUX_WINDOW_SYSTEM_VARIABLE = "XDG_SESSION_TYPE"
         private const val X11_NAME = "x11"
         private const val WAYLAND_NAME = "wayland"
 
-        private val log: Logger = LogManager.getLogger(DesktopEnvironment::class.java)
+        private val log by logger()
 
         @JvmStatic
         val current: DesktopEnvironment =
@@ -55,7 +54,5 @@ enum class DesktopEnvironment(val bestFullscreenMode: FullscreenMode) {
             }.also {
                 log.info("Found desktop environment $it")
             }
-
     }
-
 }

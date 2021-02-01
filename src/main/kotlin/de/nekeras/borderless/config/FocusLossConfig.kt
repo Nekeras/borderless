@@ -11,8 +11,8 @@ enum class FocusLossConfig(override val comment: String) : ConfigEnum {
      * top, depending on the operating system.
      */
     DO_NOTHING(
-        "Doesn't do anything when focus on a fullscreen window is lost, the window may be "
-                + "always on top, depending on the operating system."
+        "Doesn't do anything when focus on a fullscreen window is lost, the window may be " +
+            "always on top, depending on the operating system."
     ),
 
     /**
@@ -20,8 +20,8 @@ enum class FocusLossConfig(override val comment: String) : ConfigEnum {
      * Minecraft behaviour.
      */
     MINIMIZE(
-        "Minimizes (iconify) the window when focus on a fullscreen window is lost, this is the "
-                + "default Minecraft behaviour."
+        "Minimizes (iconify) the window when focus on a fullscreen window is lost, this is the " +
+            "default Minecraft behaviour."
     ),
 
     /**
@@ -29,12 +29,11 @@ enum class FocusLossConfig(override val comment: String) : ConfigEnum {
      * lost.
      */
     SWITCH_TO_WINDOWED(
-        "Switches to a windowed mode and leaves the fullscreen when focus on a fullscreen window "
-                + "is lost."
+        "Switches to a windowed mode and leaves the fullscreen when focus on a fullscreen window " +
+            "is lost."
     )
 
     ;
 
     override val translationKey = "borderless.config.focus_loss.${name.toLowerCase()}"
-
 }

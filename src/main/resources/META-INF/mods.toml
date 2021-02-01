@@ -1,4 +1,4 @@
-modLoader = "kotlin"
+modLoader = "javafml"
 loaderVersion = "[1,)"
 license = "MIT License"
 issueTrackerURL = "https://github.com/Nekeras/borderless/issues"

@@ -1,5 +1,6 @@
 package de.nekeras.borderless
 
+import de.nekeras.borderless.extensions.logger
 import net.minecraft.client.renderer.IWindowEventListener
 import org.lwjgl.glfw.GLFWFramebufferSizeCallbackI
 import org.lwjgl.glfw.GLFWWindowSizeCallbackI
@@ -15,13 +16,18 @@ class SizeChangedWindowEventListener(
 ) : IWindowEventListener {
 
     override fun setGameFocused(focused: Boolean) {
+        log.info("Game focus changed. Now focused: $focused")
+
         parent?.setGameFocused(focused)
     }
 
     override fun updateWindowSize() {
+        val isCallback = Thread.currentThread().isCalledByGlfwCallback()
+
         parent?.updateWindowSize()
 
-        if (!Thread.currentThread().isCalledByGlfwCallback()) {
+        if (!isCallback) {
+            log.info("Window size updated")
             onSizeChanged()
         }
     }
@@ -32,6 +38,7 @@ class SizeChangedWindowEventListener(
 
     companion object {
 
+        private val log by logger()
 
         /**
          * Validates whether the current call stack is called by either
@@ -45,7 +52,5 @@ class SizeChangedWindowEventListener(
                     else -> false
                 }
             }
-
     }
-
 }

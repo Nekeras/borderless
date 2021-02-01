@@ -16,8 +16,8 @@ enum class FullscreenModeConfig(override val comment: String) : ConfigEnum {
      * window borders.
      */
     BORDERLESS(
-        "A borderless fullscreen which sets the width and height of the window to the "
-                + "monitor's video mode and removing window borders."
+        "A borderless fullscreen which sets the width and height of the window to the " +
+            "monitor's video mode and removing window borders."
     ),
 
     /**
@@ -25,13 +25,12 @@ enum class FullscreenModeConfig(override val comment: String) : ConfigEnum {
      * Focus loss behaviour can be manually configured using [FocusLossConfig].
      */
     NATIVE(
-        "A native fullscreen which changes the monitor's window mode in order to apply the "
-                + "fullscreen. Focus loss behaviour can be manually configured using the 'focusLoss' "
-                + "option."
+        "A native fullscreen which changes the monitor's window mode in order to apply the " +
+            "fullscreen. Focus loss behaviour can be manually configured using the 'focusLoss' " +
+            "option."
     )
 
     ;
 
     override val translationKey = "borderless.config.fullscreen_mode.${name.toLowerCase()}"
-
 }

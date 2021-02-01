@@ -24,7 +24,5 @@ class ConfigScreen(private val parent: Screen) : Screen(TranslationTextComponent
             FullscreenModeConfig.values()
         ) { _, newValue ->
         }
-
     }
-
 }

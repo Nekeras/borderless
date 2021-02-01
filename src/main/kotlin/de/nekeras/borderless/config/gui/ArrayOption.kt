@@ -41,7 +41,5 @@ class ArrayOption<T : Translatable>(
     companion object {
 
         private const val BUTTON_HEIGHT = 20
-
     }
-
 }

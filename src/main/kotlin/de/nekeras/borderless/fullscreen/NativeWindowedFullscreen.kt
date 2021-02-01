@@ -10,9 +10,10 @@ import org.lwjgl.glfw.GLFW
  */
 object NativeWindowedFullscreen : FullscreenMode {
 
-    private val log = logger<NativeWindowedFullscreen>()
+    private val log by logger()
 
     override fun apply(window: MainWindow) {
+        log.info("Apply")
         GLFW.glfwSetWindowAttrib(window.handle, GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE)
         GLFW.glfwSetWindowFocusCallback(window.handle) { _, focused ->
             if (focused) {
@@ -24,6 +25,7 @@ object NativeWindowedFullscreen : FullscreenMode {
     }
 
     override fun reset(window: MainWindow) {
+        log.info("Reset")
         GLFW.glfwSetWindowAttrib(window.handle, GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_TRUE)
         GLFW.glfwSetWindowFocusCallback(window.handle, null)
     }
@@ -31,15 +33,27 @@ object NativeWindowedFullscreen : FullscreenMode {
     private fun onFocusGained(window: MainWindow) {
         window.tryGetMonitor(log) { monitor ->
             val videoMode = window.videoMode.orElseGet { monitor.defaultVideoMode }
-            GLFW.glfwSetWindowMonitor(window.handle, monitor.monitorPointer, 0, 0,
-                    videoMode.width, videoMode.height, videoMode.refreshRate)
+            GLFW.glfwSetWindowMonitor(
+                window.handle,
+                monitor.monitorPointer,
+                0,
+                0,
+                videoMode.width,
+                videoMode.height,
+                videoMode.refreshRate
+            )
         }
     }
 
     private fun onFocusLost(window: MainWindow) {
-        GLFW.glfwSetWindowMonitor(window.handle, 0,
-                window.windowX, window.windowY,
-                window.width, window.height, GLFW.GLFW_DONT_CARE)
+        GLFW.glfwSetWindowMonitor(
+            window.handle,
+            0,
+            window.windowX,
+            window.windowY,
+            window.width,
+            window.height,
+            GLFW.GLFW_DONT_CARE
+        )
     }
-
 }

@@ -35,6 +35,7 @@ interface FullscreenMode {
         /**
          * Converts config enum values to an actual implementation of a [FullscreenMode].
          */
+        @JvmStatic
         fun fromConfigEnums(fullscreenMode: FullscreenModeConfig, focusLoss: FocusLossConfig) =
             when (fullscreenMode) {
                 FullscreenModeConfig.BEST -> best
@@ -45,7 +46,5 @@ interface FullscreenMode {
                     FocusLossConfig.SWITCH_TO_WINDOWED -> NativeWindowedFullscreen
                 }
             }
-
     }
-
 }

@@ -14,7 +14,5 @@ object ConfigScreenOption {
 
     val focusLossOption =
         ArrayOption(FOCUS_LOSS_KEY, FocusLossConfig.values()) { oldValue, newValue ->
-
         }
-
 }

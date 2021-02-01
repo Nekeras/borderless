@@ -30,7 +30,7 @@ plugins {
 apply(plugin = "net.minecraftforge.gradle")
 
 group = "de.nekeras"
-version = "${minecraftVersion}-${modVersion}"
+version = "$minecraftVersion-$modVersion"
 
 sourceSets {
     main {
@@ -48,8 +48,11 @@ dependencies {
     create(
         group = "net.minecraftforge",
         name = "forge",
-        version = "${minecraftVersion}-${forgeVersion}"
+        version = "$minecraftVersion-$forgeVersion"
     ).apply { add("minecraft", this) }
+
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
 }
 
 configure<MinecraftExtension> {

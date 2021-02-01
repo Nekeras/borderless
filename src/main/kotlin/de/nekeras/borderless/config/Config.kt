@@ -37,5 +37,4 @@ object Config {
      */
     private fun <T : ConfigEnum> Array<T>.toComment() =
         map { mode -> "${mode.name} - ${mode.comment}" }.toTypedArray()
-
 }

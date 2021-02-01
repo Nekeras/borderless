@@ -1,5 +1,6 @@
 package de.nekeras.borderless
 
+import de.nekeras.borderless.extensions.logger
 import de.nekeras.borderless.fullscreen.FullscreenMode
 import de.nekeras.borderless.fullscreen.NativeFullscreen
 import net.minecraft.client.MainWindow
@@ -15,6 +16,8 @@ import kotlin.properties.Delegates
 class FullscreenModeHolder(private val window: MainWindow) {
 
     init {
+        log.info("Replacing default window event listener")
+
         val oldListener = window.windowEventListener
         window.windowEventListener = SizeChangedWindowEventListener(oldListener) {
             refreshFullscreenMode(fullscreenMode ?: NativeFullscreen)
@@ -25,23 +28,27 @@ class FullscreenModeHolder(private val window: MainWindow) {
      * The current fullscreen mode of the window.
      */
     var fullscreenMode: FullscreenMode? by Delegates.observable(null) { _, oldValue, newValue ->
+        log.info("Detected fullscreen mode change from $oldValue to $newValue")
         oldValue?.reset(window)
-
-        if (window.isFullscreen) {
-            refreshFullscreenMode(newValue ?: NativeFullscreen)
-        }
+        refreshFullscreenMode(newValue ?: NativeFullscreen)
     }
 
     /**
      * Re-applies the supplied fullscreen mode [fullscreenMode].
      */
     private fun refreshFullscreenMode(fullscreenMode: FullscreenMode) {
+        log.info("Refreshing $fullscreenMode")
+
         if (window.isFullscreen) {
             fullscreenMode.apply(window)
+        } else {
+            fullscreenMode.reset(window)
         }
     }
 
     companion object {
+
+        private val log by logger()
 
         /**
          * Reflection [Field] for the [IWindowEventListener] in the [MainWindow] class.
@@ -60,7 +67,5 @@ class FullscreenModeHolder(private val window: MainWindow) {
         private var MainWindow.windowEventListener: IWindowEventListener?
             get() = windowEventListenerField.get(this) as? IWindowEventListener
             set(value) = windowEventListenerField.set(this, value)
-
     }
-
 }
