@@ -1,12 +1,11 @@
 package de.nekeras.borderless;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-
 import de.nekeras.borderless.fullscreen.FullscreenMode;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.renderer.IWindowEventListener;
+
+import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * A custom {@link IWindowEventListener} that will call all original methods of the supplied
@@ -14,7 +13,7 @@ import net.minecraft.client.renderer.IWindowEventListener;
  * once {@link MainWindow#isFullscreen()} returns <code>true</code> or <code>false</code>
  * respectively.
  *
- * @see Borderless#getFullscreenMode()
+ * @see FullscreenModeHolder#getFullscreenMode()
  * @see FullscreenMode#apply(MainWindow)
  * @see FullscreenMode#reset(MainWindow)
  */
@@ -27,24 +26,23 @@ public class FullscreenWindowEventListener implements IWindowEventListener {
     }
 
     @Override
-    public void setGameFocused(boolean focused) {
-        defaultWindowEventListener.setGameFocused(focused);
+    public void setWindowActive(boolean focused) {
+        defaultWindowEventListener.setWindowActive(focused);
     }
 
     @Override
-    public void updateWindowSize() {
-        defaultWindowEventListener.updateWindowSize();
+    public void resizeDisplay() {
+        defaultWindowEventListener.resizeDisplay();
 
         if (ReflectionUtil.isCalledByGlfwCallback()) {
             return;
         }
 
-        Borderless.forceFullscreenModeUpdate();
+        FullscreenModeHolder.forceFullscreenModeUpdate();
     }
 
     @Override
-    public void func_241216_b_() {
-        defaultWindowEventListener.func_241216_b_();
+    public void cursorEntered() {
+        defaultWindowEventListener.cursorEntered();
     }
-
 }

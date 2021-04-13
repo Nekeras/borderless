@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter
 val minecraftVersion: String by extra
 val modVersion: String by extra
 val forgeVersion: String by extra
-val forgeMappings: String by extra
 
 buildscript {
     repositories {
@@ -28,11 +27,11 @@ apply(plugin = "net.minecraftforge.gradle")
 val mainSourceSet: SourceSet = java.sourceSets.findByName("main")!!
 
 fun DependencyHandlerScope.minecraft(): ExternalModuleDependency =
-        create(
-                group = "net.minecraftforge",
-                name = "forge",
-                version = "${minecraftVersion}-${forgeVersion}"
-        ).apply { add("minecraft", this) }
+    create(
+        group = "net.minecraftforge",
+        name = "forge",
+        version = "${minecraftVersion}-${forgeVersion}"
+    ).apply { add("minecraft", this) }
 
 group = "de.nekeras"
 version = "${minecraftVersion}-${modVersion}"
@@ -54,7 +53,7 @@ dependencies {
 }
 
 configure<MinecraftExtension> {
-    mappings("snapshot", forgeMappings)
+    mappings("official", minecraftVersion)
 
     runs {
         "client" {
@@ -74,7 +73,8 @@ configure<MinecraftExtension> {
 
 tasks.withType<Jar> {
     manifest {
-        attributes(mapOf(
+        attributes(
+            mapOf(
                 "Specification-Title" to project.name,
                 "Specification-Vendor" to "Nekeras",
                 "Specification-Version" to project.version,
@@ -82,10 +82,11 @@ tasks.withType<Jar> {
                 "Implementation-Version" to project.version,
                 "Implementation-Vendor" to "Nekeras",
                 "Implementation-Timestamp" to DateTimeFormatter
-                        .ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
-                        .withZone(ZoneId.systemDefault())
-                        .format(Instant.now())
-        ))
+                    .ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
+                    .withZone(ZoneId.systemDefault())
+                    .format(Instant.now())
+            )
+        )
     }
 }
 
@@ -98,10 +99,12 @@ tasks.withType<ProcessResources> {
 
     from(mainSourceSet.resources.srcDirs) {
         include("META-INF/mods.toml")
-        expand(mapOf(
+        expand(
+            mapOf(
                 "version" to project.version,
                 "forge_version_major" to forgeVersion.split(".")[0]
-        ))
+            )
+        )
     }
 }
 

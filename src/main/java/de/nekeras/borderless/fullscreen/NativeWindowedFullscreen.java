@@ -1,12 +1,11 @@
 package de.nekeras.borderless.fullscreen;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
-
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Monitor;
 import net.minecraft.client.renderer.VideoMode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 
 /**
  * The same as {@link NativeFullscreen}, but switches to normal windowed mode on focus loss of
@@ -18,8 +17,8 @@ public class NativeWindowedFullscreen implements FullscreenMode {
 
     @Override
     public void apply(MainWindow window) {
-        GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE);
-        GLFW.glfwSetWindowFocusCallback(window.getHandle(), (win, focused) -> {
+        GLFW.glfwSetWindowAttrib(window.getWindow(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE);
+        GLFW.glfwSetWindowFocusCallback(window.getWindow(), (win, focused) -> {
             if (focused) {
                 onFocusGained(window);
             } else {
@@ -30,28 +29,28 @@ public class NativeWindowedFullscreen implements FullscreenMode {
 
     @Override
     public void reset(MainWindow window) {
-        GLFW.glfwSetWindowAttrib(window.getHandle(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_TRUE);
-        GLFW.glfwSetWindowFocusCallback(window.getHandle(), null);
+        GLFW.glfwSetWindowAttrib(window.getWindow(), GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_TRUE);
+        GLFW.glfwSetWindowFocusCallback(window.getWindow(), null);
     }
 
     private void onFocusGained(MainWindow window) {
-        Monitor monitor = window.getMonitor();
+        Monitor monitor = window.findBestMonitor();
 
         if (monitor == null) {
             log.error("Could not find monitor for window");
             return;
         }
 
-        VideoMode videoMode = window.getVideoMode().orElseGet(monitor::getDefaultVideoMode);
+        VideoMode videoMode = window.getPreferredFullscreenVideoMode().orElseGet(monitor::getCurrentMode);
 
-        GLFW.glfwSetWindowMonitor(window.getHandle(), monitor.getMonitorPointer(), 0, 0,
-            videoMode.getWidth(), videoMode.getHeight(), videoMode.getRefreshRate());
+        GLFW.glfwSetWindowMonitor(window.getWindow(), monitor.getMonitor(), 0, 0,
+                videoMode.getWidth(), videoMode.getHeight(), videoMode.getRefreshRate());
     }
 
     private void onFocusLost(MainWindow window) {
-        GLFW.glfwSetWindowMonitor(window.getHandle(), 0,
-            window.getWindowX(), window.getWindowY(),
-            window.getWidth(), window.getHeight(), GLFW.GLFW_DONT_CARE);
+        GLFW.glfwSetWindowMonitor(window.getWindow(), 0,
+                window.getX(), window.getY(),
+                window.getWidth(), window.getHeight(), GLFW.GLFW_DONT_CARE);
     }
 
 }

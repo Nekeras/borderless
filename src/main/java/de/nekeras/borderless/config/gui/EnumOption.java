@@ -1,7 +1,5 @@
 package de.nekeras.borderless.config.gui;
 
-import javax.annotation.Nonnull;
-
 import de.nekeras.borderless.config.value.ValueHolder;
 import net.minecraft.client.AbstractOption;
 import net.minecraft.client.GameSettings;
@@ -9,6 +7,8 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.OptionButton;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import javax.annotation.Nonnull;
 
 public class EnumOption<E extends Enum<E>> extends AbstractOption {
 
@@ -19,7 +19,7 @@ public class EnumOption<E extends Enum<E>> extends AbstractOption {
     private final ValueHolder<E> valueHolder;
 
     public EnumOption(@Nonnull String translationKey, @Nonnull Class<E> enumClass,
-        @Nonnull ValueHolder<E> holder) {
+                      @Nonnull ValueHolder<E> holder) {
         super(translationKey);
         this.enumClass = enumClass;
         this.values = enumClass.getEnumConstants();
@@ -47,19 +47,18 @@ public class EnumOption<E extends Enum<E>> extends AbstractOption {
     }
 
     public ITextComponent getText(E value) {
-        return func_243222_a(new TranslationTextComponent(value.toString()));
+        return genericValueLabel(new TranslationTextComponent(value.toString()));
     }
 
     @Nonnull
     @Override
-    public Widget createWidget(@Nonnull GameSettings options, int x, int y, int width) {
-        return new OptionButton(x, y, width, BUTTON_HEIGHT, this, getText(), (p_216721_2_) -> {
+    public Widget createButton(@Nonnull GameSettings options, int x, int y, int width) {
+        return new OptionButton(x, y, width, BUTTON_HEIGHT, this, getText(), (btn) -> {
             int index = (getValueIndex() + 1) % enumClass.getEnumConstants().length;
             E value = enumClass.getEnumConstants()[index];
 
             valueHolder.set(value);
-            p_216721_2_.func_238482_a_(getText(value));
+            btn.setMessage(getText(value));
         });
     }
-
 }
