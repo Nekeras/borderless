@@ -1,5 +1,7 @@
 package de.nekeras.borderless.config
 
+import net.minecraft.util.text.TranslationTextComponent
+
 /**
  * All supported fullscreen modes that may be selected in the config file.
  */
@@ -32,5 +34,5 @@ enum class FullscreenModeConfig(override val comment: String) : ConfigEnum {
 
     ;
 
-    override val translationKey = "borderless.config.fullscreen_mode.${name.toLowerCase()}"
+    override val translation = TranslationTextComponent("borderless.config.fullscreen_mode.${name.toLowerCase()}")
 }

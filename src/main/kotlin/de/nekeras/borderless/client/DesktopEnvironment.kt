@@ -1,16 +1,19 @@
-package de.nekeras.borderless
+package de.nekeras.borderless.client
 
-import de.nekeras.borderless.extensions.logger
-import de.nekeras.borderless.fullscreen.BorderlessFullscreen
-import de.nekeras.borderless.fullscreen.FullscreenMode
-import de.nekeras.borderless.fullscreen.NativeFullscreen
-import de.nekeras.borderless.fullscreen.NativeNonIconifyFullscreen
+import de.nekeras.borderless.client.fullscreen.BorderlessFullscreen
+import de.nekeras.borderless.client.fullscreen.FullscreenMode
+import de.nekeras.borderless.client.fullscreen.NativeFullscreen
+import de.nekeras.borderless.client.fullscreen.NativeNonIconifyFullscreen
+import de.nekeras.borderless.logger
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.api.distmarker.OnlyIn
 import org.lwjgl.system.Platform
 
 /**
  * Possible desktop environments Minecraft can be run on. Each environment may have a [bestFullscreenMode]
  * fullscreen mode that should be used when executed in such an environment.
  */
+@OnlyIn(Dist.CLIENT)
 enum class DesktopEnvironment(val bestFullscreenMode: FullscreenMode) {
 
     /**

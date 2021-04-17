@@ -1,7 +1,9 @@
-package de.nekeras.borderless
+package de.nekeras.borderless.client
 
-import de.nekeras.borderless.extensions.logger
+import de.nekeras.borderless.logger
 import net.minecraft.client.renderer.IWindowEventListener
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.api.distmarker.OnlyIn
 import org.lwjgl.glfw.GLFWFramebufferSizeCallbackI
 import org.lwjgl.glfw.GLFWWindowSizeCallbackI
 
@@ -10,21 +12,22 @@ import org.lwjgl.glfw.GLFWWindowSizeCallbackI
  * notify the supplied [onSizeChanged] callback. Furthermore, this listener may have a [parent],
  * which means it will notify the parent on all events as well.
  */
+@OnlyIn(Dist.CLIENT)
 class SizeChangedWindowEventListener(
     private val parent: IWindowEventListener?,
     private val onSizeChanged: () -> Unit
 ) : IWindowEventListener {
 
-    override fun setGameFocused(focused: Boolean) {
+    override fun setWindowActive(focused: Boolean) {
         log.info("Game focus changed. Now focused: $focused")
 
-        parent?.setGameFocused(focused)
+        parent?.setWindowActive(focused)
     }
 
-    override fun updateWindowSize() {
+    override fun resizeDisplay() {
         val isCallback = Thread.currentThread().isCalledByGlfwCallback()
 
-        parent?.updateWindowSize()
+        parent?.resizeDisplay()
 
         if (!isCallback) {
             log.info("Window size updated")
@@ -32,8 +35,8 @@ class SizeChangedWindowEventListener(
         }
     }
 
-    override fun ignoreFirstMove() {
-        parent?.ignoreFirstMove()
+    override fun cursorEntered() {
+        parent?.cursorEntered()
     }
 
     companion object {

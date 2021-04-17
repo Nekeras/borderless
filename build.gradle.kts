@@ -1,33 +1,12 @@
-import net.minecraftforge.gradle.common.util.MinecraftExtension
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-
 val minecraftVersion: String by extra
 val modVersion: String by extra
 val forgeVersion: String by extra
-val forgeMappings: String by extra
-
-buildscript {
-    repositories {
-        jcenter()
-        maven("https://files.minecraftforge.net/maven")
-    }
-    dependencies {
-        classpath("net.minecraftforge.gradle:ForgeGradle:3.+")
-    }
-}
 
 plugins {
-    val kotlinVersion: String by System.getProperties()
-    val ktlintVersion: String by System.getProperties()
-
-    kotlin("jvm") version kotlinVersion
-    `maven-publish`
-    id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
+    kotlin("jvm")
+    id("org.jlleitschuh.gradle.ktlint")
+    id("net.minecraftforge.gradle")
 }
-
-apply(plugin = "net.minecraftforge.gradle")
 
 group = "de.nekeras"
 version = "$minecraftVersion-$modVersion"
@@ -38,10 +17,6 @@ sourceSets {
             srcDirs("src/main/kotlin")
         }
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
@@ -55,8 +30,8 @@ dependencies {
     implementation(kotlin("reflect"))
 }
 
-configure<MinecraftExtension> {
-    mappings("snapshot", forgeMappings)
+minecraft {
+    mappings("official", minecraftVersion)
 
     runs {
         maybeCreate("client").apply {
@@ -89,11 +64,7 @@ tasks.jar {
                 "Specification-Version" to project.version,
                 "Implementation-Title" to project.name,
                 "Implementation-Version" to project.version,
-                "Implementation-Vendor" to "Nekeras",
-                "Implementation-Timestamp" to DateTimeFormatter
-                    .ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
-                    .withZone(ZoneId.systemDefault())
-                    .format(Instant.now())
+                "Implementation-Vendor" to "Nekeras"
             )
         )
     }
@@ -107,11 +78,11 @@ tasks.processResources {
     dependsOn(forceModsTomlRefresh)
 
     from(sourceSets.main.get().resources.srcDirs) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         include("META-INF/mods.toml")
         expand(
             mapOf(
-                "version" to project.version,
-                "forge_version_major" to forgeVersion.split(".")[0]
+                "version" to project.version
             )
         )
     }

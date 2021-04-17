@@ -1,15 +1,18 @@
-package de.nekeras.borderless.fullscreen
+package de.nekeras.borderless.client.fullscreen
 
-import de.nekeras.borderless.DesktopEnvironment
+import de.nekeras.borderless.client.DesktopEnvironment
 import de.nekeras.borderless.config.FocusLossConfig
 import de.nekeras.borderless.config.FullscreenModeConfig
 import net.minecraft.client.MainWindow
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.api.distmarker.OnlyIn
 
 /**
  * A fullscreen mode that can be applied for the Minecraft [MainWindow]. The [apply] method
  * will be apply this fullscreen mode on the supplied window instance, the [reset] method may
  * revert all changes that were made.
  */
+@OnlyIn(Dist.CLIENT)
 interface FullscreenMode {
 
     /**

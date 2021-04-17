@@ -1,12 +1,14 @@
 package de.nekeras.borderless
 
+import net.minecraft.util.text.ITextComponent
+
 /**
  * Indicates a type which can be translated.
  */
 interface Translatable {
 
     /**
-     * The localization key for this instance.
+     * The localization message for this instance.
      */
-    val translationKey: String
+    val translation: ITextComponent
 }

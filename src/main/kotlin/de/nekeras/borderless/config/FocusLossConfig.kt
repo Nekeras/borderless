@@ -1,5 +1,7 @@
 package de.nekeras.borderless.config
 
+import net.minecraft.util.text.TranslationTextComponent
+
 /**
  * Settings for a focus loss behaviour that is applied on a fullscreen window. These setting will
  * only be applied when using [FullscreenModeConfig.NATIVE].
@@ -35,5 +37,5 @@ enum class FocusLossConfig(override val comment: String) : ConfigEnum {
 
     ;
 
-    override val translationKey = "borderless.config.focus_loss.${name.toLowerCase()}"
+    override val translation = TranslationTextComponent("borderless.config.focus_loss.${name.toLowerCase()}")
 }

@@ -1,4 +1,4 @@
-package de.nekeras.borderless.extensions
+package de.nekeras.borderless.client
 
 import net.minecraft.client.MainWindow
 import net.minecraft.client.Monitor
@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW
  * supplied [logger] and the function returns without calling [action].
  */
 inline fun MainWindow.tryGetMonitor(logger: Logger, action: (Monitor) -> Unit) {
-    monitor?.let { action(it) }
+    findBestMonitor()?.let { action(it) }
         ?: logger.error("Window's current monitor could not be retrieved")
 }
 
@@ -19,4 +19,4 @@ inline fun MainWindow.tryGetMonitor(logger: Logger, action: (Monitor) -> Unit) {
  * Retrieves the monitor's name from GLFW.
  */
 val Monitor.name: String
-    get() = GLFW.glfwGetMonitorName(monitorPointer) ?: "- ERROR -"
+    get() = GLFW.glfwGetMonitorName(monitor) ?: "- ERROR -"
