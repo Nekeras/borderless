@@ -1,5 +1,10 @@
 {
+  "borderless.config.video_settings_button": "Borderless Window...",
+  "borderless.config.video_settings_button.tooltip": "Configuration relating Borderless Window to provide advanced fullscreen options",
   "borderless.config.title": "Borderless Window Config",
+  "borderless.config.apply": "Apply",
+  "borderless.config.enabled": "Enabled",
+  "borderless.config.enabled.tooltip": "Enable/disable Borderless Window",
   "borderless.config.fullscreen_mode": "Fullscreen Mode",
   "borderless.config.fullscreen_mode.best": "Best",
   "borderless.config.fullscreen_mode.borderless": "Borderless",

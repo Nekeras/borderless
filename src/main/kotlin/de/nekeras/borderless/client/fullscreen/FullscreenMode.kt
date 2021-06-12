@@ -1,8 +1,6 @@
 package de.nekeras.borderless.client.fullscreen
 
 import de.nekeras.borderless.client.DesktopEnvironment
-import de.nekeras.borderless.config.FocusLossConfig
-import de.nekeras.borderless.config.FullscreenModeConfig
 import net.minecraft.client.MainWindow
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
@@ -34,20 +32,5 @@ interface FullscreenMode {
          */
         @JvmStatic
         val best = DesktopEnvironment.current.bestFullscreenMode
-
-        /**
-         * Converts config enum values to an actual implementation of a [FullscreenMode].
-         */
-        @JvmStatic
-        fun fromConfigEnums(fullscreenMode: FullscreenModeConfig, focusLoss: FocusLossConfig) =
-            when (fullscreenMode) {
-                FullscreenModeConfig.BEST -> best
-                FullscreenModeConfig.BORDERLESS -> BorderlessFullscreen
-                FullscreenModeConfig.NATIVE -> when (focusLoss) {
-                    FocusLossConfig.DO_NOTHING -> NativeFullscreen
-                    FocusLossConfig.MINIMIZE -> NativeNonIconifyFullscreen
-                    FocusLossConfig.SWITCH_TO_WINDOWED -> NativeWindowedFullscreen
-                }
-            }
     }
 }

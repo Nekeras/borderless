@@ -1,42 +1,69 @@
 package de.nekeras.borderless.client.gui
 
 import com.mojang.blaze3d.matrix.MatrixStack
+import de.nekeras.borderless.client.FullscreenModeHolder
+import de.nekeras.borderless.config.Config
 import de.nekeras.borderless.config.FocusLossConfig
 import de.nekeras.borderless.config.FullscreenModeConfig
+import net.minecraft.client.GameSettings
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.AbstractGui
+import net.minecraft.client.gui.DialogTexts
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.widget.Widget
 import net.minecraft.client.gui.widget.button.Button
-import net.minecraft.client.gui.widget.button.OptionButton
 import net.minecraft.util.text.TranslationTextComponent
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
+import java.util.Locale
 
 @OnlyIn(Dist.CLIENT)
-class ConfigScreen(private val parent: Screen) : Screen(title) {
+class ConfigScreen(private val parent: Screen) : Screen(titleText) {
 
-    private lateinit var fullscreenModeButton: OptionButton
-    private lateinit var focusLossButton: OptionButton
+    private var initialEnabledState: Boolean = false
+    private lateinit var initialFullscreenMode: FullscreenModeConfig
+    private lateinit var initialFocusLossMode: FocusLossConfig
+
+    private lateinit var enabledButton: Widget
+    private lateinit var fullscreenModeButton: Widget
+    private lateinit var focusLossButton: Widget
 
     override fun init() = withMinecraft {
         super.init()
 
-        val x = getHorizontalLayoutStart(width)
-        fullscreenModeButton = ConfigScreenOption.fullscreen.createButton(options, x, LINE_HEIGHT * 2, LAYOUT_MAX_WIDTH)
-        focusLossButton = ConfigScreenOption.focusLoss.createButton(options, x, LINE_HEIGHT * 3, LAYOUT_MAX_WIDTH)
+        initialEnabledState = Config.enabledConfig.get()
+        initialFullscreenMode = Config.fullscreenModeConfig.get()
+        initialFocusLossMode = Config.focusLossConfig.get()
 
-        val done = Button((width - 100) / 2, height - 75, 100, 20, TranslationTextComponent("gui.done")) {
+        val x = getHorizontalLayoutStart(width)
+        enabledButton = ConfigScreenOption.enabled.createButton(options, x, LINE_HEIGHT * 2, LAYOUT_MAX_WIDTH)
+        fullscreenModeButton = ConfigScreenOption.fullscreen.createButton(options, x, LINE_HEIGHT * 3, LAYOUT_MAX_WIDTH)
+        focusLossButton = ConfigScreenOption.focusLoss.createButton(options, x, LINE_HEIGHT * 4, LAYOUT_MAX_WIDTH)
+
+        val apply = Button(width / 2 - 125, height - 75, 100, 20, applyText) {
+            FullscreenModeHolder.refreshFullscreenModeFromConfig()
             onClose()
         }
 
+        val cancel = Button(width / 2 + 25, height - 75, 100, 20, DialogTexts.GUI_CANCEL) {
+            Config.enabledConfig.set(initialEnabledState)
+            Config.fullscreenModeConfig.set(initialFullscreenMode)
+            Config.focusLossConfig.set(initialFocusLossMode)
+            onClose()
+        }
+
+        addButton(enabledButton)
         addButton(fullscreenModeButton)
         addButton(focusLossButton)
-        addButton(done)
+        addButton(apply)
+        addButton(cancel)
+
+        refreshButtonStates()
     }
 
     override fun tick() {
         super.tick()
-        focusLossButton.visible = ConfigScreenOption.fullscreen.value == FullscreenModeConfig.NATIVE
+        refreshButtonStates()
     }
 
     override fun render(matrixStack: MatrixStack, x: Int, y: Int, frameTime: Float) {
@@ -57,27 +84,38 @@ class ConfigScreen(private val parent: Screen) : Screen(title) {
     }
 
     private fun renderDescription(width: Int) = withMinecraft {
-        val x = getHorizontalLayoutStart(width)
-        val y: Int = LINE_HEIGHT * 4
+        if (ConfigScreenOption.enabled.get(options)) {
+            val x = getHorizontalLayoutStart(width)
+            val y: Int = LINE_HEIGHT * 5
 
-        font.drawWordWrap(TranslationTextComponent(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE)
+            font.drawWordWrap(TranslationTextComponent(getDescriptionKey(options)), x, y, LAYOUT_MAX_WIDTH, WHITE)
+        }
     }
 
     private fun renderChangedWarning(width: Int, height: Int) = withMinecraft {
         val x = getHorizontalLayoutStart(width)
         val y = height - 50
 
-        font.drawWordWrap(changedWarning, x, y, LAYOUT_MAX_WIDTH, YELLOW)
+        font.drawWordWrap(changedWarningText, x, y, LAYOUT_MAX_WIDTH, YELLOW)
     }
 
-    private fun getDescriptionKey(): String {
-        val mode: FullscreenModeConfig = ConfigScreenOption.fullscreen.value
+    private fun refreshButtonStates() = withMinecraft {
+        val enabled = ConfigScreenOption.enabled.get(options)
+
+        fullscreenModeButton.visible = enabled
+        focusLossButton.visible = enabled && ConfigScreenOption.fullscreen.get(options) == FullscreenModeConfig.NATIVE
+    }
+
+    private fun getDescriptionKey(settings: GameSettings): String {
+        val mode: FullscreenModeConfig = ConfigScreenOption.fullscreen.get(settings)
+        val modeName = mode.name.lowercase(Locale.getDefault())
 
         return if (mode != FullscreenModeConfig.NATIVE) {
-            "$DESCRIPTION_KEY_BASE.${mode.name.toLowerCase()}"
+            "$DESCRIPTION_KEY_BASE.$modeName"
         } else {
-            val focusLoss: FocusLossConfig = ConfigScreenOption.focusLoss.value
-            "$DESCRIPTION_KEY_BASE.${mode.name.toLowerCase()}.${focusLoss.name.toLowerCase()}"
+            val focusLoss: FocusLossConfig = ConfigScreenOption.focusLoss.get(settings)
+            val focusLossName = focusLoss.name.lowercase(Locale.getDefault())
+            "$DESCRIPTION_KEY_BASE.$modeName.$focusLossName"
         }
     }
 
@@ -93,7 +131,8 @@ class ConfigScreen(private val parent: Screen) : Screen(title) {
         private const val YELLOW = 0xffff00
         private const val LINE_HEIGHT = 25
 
-        private val title = TranslationTextComponent("borderless.config.title")
-        private val changedWarning = TranslationTextComponent("borderless.config.changed")
+        private val titleText = TranslationTextComponent("borderless.config.title")
+        private val applyText = TranslationTextComponent("borderless.config.apply")
+        private val changedWarningText = TranslationTextComponent("borderless.config.changed")
     }
 }

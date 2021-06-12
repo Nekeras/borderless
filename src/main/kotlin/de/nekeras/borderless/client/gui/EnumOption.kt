@@ -3,38 +3,40 @@ package de.nekeras.borderless.client.gui
 import de.nekeras.borderless.Translatable
 import net.minecraft.client.AbstractOption
 import net.minecraft.client.GameSettings
+import net.minecraft.client.gui.widget.Widget
 import net.minecraft.client.gui.widget.button.Button
 import net.minecraft.client.gui.widget.button.OptionButton
 import net.minecraft.util.text.ITextComponent
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
-import net.minecraftforge.common.ForgeConfigSpec
 
 @OnlyIn(Dist.CLIENT)
 class EnumOption<T>(
     translationKey: String,
-    private val config: ForgeConfigSpec.EnumValue<T>,
     private val enumConstants: Array<T>,
-    private val onChange: (T, T) -> Unit
+    private val getter: (GameSettings) -> T,
+    private val setter: (GameSettings, T) -> Unit
 ) : AbstractOption(translationKey) where T : Translatable, T : Enum<T> {
 
-    val value: T
-        get() = config.get()
+    fun get(settings: GameSettings): T = getter(settings)
 
-    val title: ITextComponent
-        get() = value.translation
+    fun getMessage(settings: GameSettings): ITextComponent = genericValueLabel(get(settings).translation)
 
-    override fun createButton(options: GameSettings, x: Int, y: Int, width: Int) =
-        OptionButton(x, y, width, BUTTON_HEIGHT, this, title, this::onButtonClick)
+    override fun createButton(settings: GameSettings, x: Int, y: Int, width: Int): Widget =
+        OptionButton(x, y, width, BUTTON_HEIGHT, this, getMessage(settings)) {
+            onButtonClick(settings, it)
+        }
 
-    private fun onButtonClick(button: Button) {
-        val oldValue = value
+    private fun onButtonClick(settings: GameSettings, button: Button) {
+        val value = get(settings)
+        val nextValueIndex = (value.ordinal + 1) % enumConstants.size
+        val nextValue = enumConstants[nextValueIndex]
 
-        val index = (value.ordinal + 1) % enumConstants.size
-        config.set(enumConstants.getOrNull(index))
+        setter(settings, nextValue)
+        settings.save()
+
+        val title = getMessage(settings)
         button.message = title
-
-        onChange(oldValue, value)
     }
 
     companion object {

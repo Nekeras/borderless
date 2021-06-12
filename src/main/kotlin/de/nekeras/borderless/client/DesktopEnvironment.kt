@@ -44,6 +44,9 @@ enum class DesktopEnvironment(val bestFullscreenMode: FullscreenMode) {
 
         private val log by logger()
 
+        /**
+         * The current desktop environment of the runtime.
+         */
         @JvmStatic
         val current: DesktopEnvironment =
             when (Platform.get()) {

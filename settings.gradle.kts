@@ -20,4 +20,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "borderless"
+rootProject.name = "BorderlessWindow"

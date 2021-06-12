@@ -2,16 +2,15 @@ package de.nekeras.borderless.client
 
 import de.nekeras.borderless.client.FullscreenModeHolder.window
 import de.nekeras.borderless.client.fullscreen.FullscreenMode
+import de.nekeras.borderless.client.listener.SizeChangedWindowEventListener
 import de.nekeras.borderless.config.Config
-import de.nekeras.borderless.config.FocusLossConfig
-import de.nekeras.borderless.config.FullscreenModeConfig
 import de.nekeras.borderless.logger
+import de.nekeras.borderless.makeFieldAccessible
 import net.minecraft.client.MainWindow
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.IWindowEventListener
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
-import java.lang.reflect.Field
 import kotlin.properties.Delegates
 
 /**
@@ -26,22 +25,9 @@ object FullscreenModeHolder {
     private val window: MainWindow = Minecraft.getInstance().window
 
     /**
-     * Reflection [Field] for the [IWindowEventListener] in the [MainWindow] class.
-     */
-    private val windowEventListenerField: Field =
-        MainWindow::class.java.declaredFields.find { field ->
-            field.type == IWindowEventListener::class.java
-        }?.let { field ->
-            field.isAccessible = true
-            field
-        } ?: throw IllegalStateException("Could not find WindowEventListener")
-
-    /**
      * Access for the [IWindowEventListener] in the [MainWindow] class that is called on window events.
      */
-    private var MainWindow.windowEventListener: IWindowEventListener?
-        get() = windowEventListenerField.get(this) as? IWindowEventListener
-        set(value) = windowEventListenerField.set(this, value)
+    private var MainWindow.windowEventListener by makeFieldAccessible<MainWindow, IWindowEventListener>()
 
     /**
      * The current fullscreen mode of the window.
@@ -58,6 +44,9 @@ object FullscreenModeHolder {
         }
     }
 
+    /**
+     * Initializes the Minecraft instance to work with the custom [SizeChangedWindowEventListener].
+     */
     @JvmStatic
     fun initializeMinecraft() {
         log.info("Replacing default window event listener")
@@ -66,16 +55,16 @@ object FullscreenModeHolder {
         window.windowEventListener = SizeChangedWindowEventListener(oldListener) {
             refreshFullscreenModeFromConfig()
         }
+
+        refreshFullscreenModeFromConfig()
     }
 
     /**
-     * Re-applies the current fullscreen mode set in [Config.fullscreenMode] and [Config.focusLoss].
+     * Re-applies the current fullscreen mode set in the [Config].
      */
     @JvmStatic
     fun refreshFullscreenModeFromConfig() {
-        log.info("Refreshing $fullscreenMode")
-        val fullscreenConfig = Config.fullscreenMode.get() ?: FullscreenModeConfig.NATIVE
-        val focusLossConfig = Config.focusLoss.get() ?: FocusLossConfig.DO_NOTHING
-        fullscreenMode = FullscreenMode.fromConfigEnums(fullscreenConfig, focusLossConfig)
+        log.info("Refreshing fullscreen mode from config to ${Config.fullscreenMode}")
+        fullscreenMode = Config.fullscreenMode
     }
 }

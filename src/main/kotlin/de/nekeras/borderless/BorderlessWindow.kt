@@ -1,6 +1,8 @@
 package de.nekeras.borderless
 
+import de.nekeras.borderless.client.listener.VideoSettingsListener
 import de.nekeras.borderless.config.Config
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.ExtensionPoint
 import net.minecraftforge.fml.ModLoadingContext
@@ -32,11 +34,13 @@ class BorderlessWindow {
             this::onClientInit
         )
 
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, VideoSettingsListener::onVideoSettings)
+
         configureModLoadingContext()
     }
 
     private fun configureModLoadingContext() = with(ModLoadingContext.get()) {
-        log.info("Enable always server compatible")
+        log.info("Enable server compatibility")
         registerExtensionPoint(ExtensionPoint.DISPLAYTEST) {
             Pair.of(
                 Supplier { FMLNetworkConstants.IGNORESERVERONLY },

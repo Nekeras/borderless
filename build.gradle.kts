@@ -11,14 +11,6 @@ plugins {
 group = "de.nekeras"
 version = "$minecraftVersion-$modVersion"
 
-sourceSets {
-    main {
-        java {
-            srcDirs("src/main/kotlin")
-        }
-    }
-}
-
 dependencies {
     create(
         group = "net.minecraftforge",

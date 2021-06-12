@@ -1,4 +1,4 @@
-package de.nekeras.borderless.client
+package de.nekeras.borderless.client.listener
 
 import de.nekeras.borderless.logger
 import net.minecraft.client.renderer.IWindowEventListener
@@ -36,6 +36,7 @@ class SizeChangedWindowEventListener(
     }
 
     override fun cursorEntered() {
+        log.info("Window cursor entered")
         parent?.cursorEntered()
     }
 
