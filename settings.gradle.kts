@@ -1,22 +1,18 @@
 pluginManagement {
-    val kotlinVersion: String by settings
-    val ktlintVersion: String by settings
-    val forgeGradleVersion: String by settings
-
     repositories {
         gradlePluginPortal()
-        maven("https://files.minecraftforge.net/maven")
+        maven("https://maven.minecraftforge.net")
     }
     resolutionStrategy {
         eachPlugin {
             when (requested.id.id) {
-                "net.minecraftforge.gradle" -> useModule("net.minecraftforge.gradle:ForgeGradle:$forgeGradleVersion")
+                "net.minecraftforge.gradle" -> useModule("net.minecraftforge.gradle:ForgeGradle:5.0.0")
             }
         }
     }
     plugins {
-        kotlin("jvm") version kotlinVersion
-        id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
+        kotlin("jvm") version "1.5.0"
+        id("org.jlleitschuh.gradle.ktlint") version "9.4.0"
     }
 }
 
