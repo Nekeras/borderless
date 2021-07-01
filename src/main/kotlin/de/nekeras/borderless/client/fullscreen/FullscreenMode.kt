@@ -1,5 +1,6 @@
 package de.nekeras.borderless.client.fullscreen
 
+import de.nekeras.borderless.Glfw.applyDefaultWindowAttributes
 import de.nekeras.borderless.client.DesktopEnvironment
 import net.minecraft.client.MainWindow
 import net.minecraftforge.api.distmarker.Dist
@@ -16,13 +17,17 @@ interface FullscreenMode {
     /**
      * Applies this fullscreen mode on the supplied [window].
      */
-    fun apply(window: MainWindow)
+    fun apply(window: MainWindow) {
+        window.applyDefaultWindowAttributes()
+    }
 
     /**
      * Resets this fullscreen mod on the supplied [window], reverting any changes that were made
      * in [apply].
      */
-    fun reset(window: MainWindow)
+    fun reset(window: MainWindow) {
+        window.applyDefaultWindowAttributes()
+    }
 
     companion object {
 

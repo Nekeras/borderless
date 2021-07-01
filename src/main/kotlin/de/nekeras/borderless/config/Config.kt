@@ -52,9 +52,9 @@ object Config {
                 when (fullscreenModeConfig.get() ?: FullscreenModeConfig.BEST) {
                     FullscreenModeConfig.BEST -> FullscreenMode.best
                     FullscreenModeConfig.BORDERLESS -> BorderlessFullscreen
-                    FullscreenModeConfig.NATIVE -> when (focusLossConfig.get() ?: FocusLossConfig.DO_NOTHING) {
-                        FocusLossConfig.DO_NOTHING -> NativeFullscreen
-                        FocusLossConfig.MINIMIZE -> NativeNonIconifyFullscreen
+                    FullscreenModeConfig.NATIVE -> when (focusLossConfig.get() ?: FocusLossConfig.MINIMIZE) {
+                        FocusLossConfig.DO_NOTHING -> NativeNonIconifyFullscreen
+                        FocusLossConfig.MINIMIZE -> NativeFullscreen
                         FocusLossConfig.SWITCH_TO_WINDOWED -> NativeWindowedFullscreen
                     }
                 }

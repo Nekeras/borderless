@@ -37,5 +37,5 @@ enum class FocusLossConfig(override val comment: String) : ConfigEnum {
 
     ;
 
-    override val translation = TranslationTextComponent("borderless.config.focus_loss.${name.toLowerCase()}")
+    override val translation = TranslationTextComponent("borderless.config.focus_loss.${name.lowercase()}")
 }

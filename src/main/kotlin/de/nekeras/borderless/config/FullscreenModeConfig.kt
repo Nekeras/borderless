@@ -34,5 +34,5 @@ enum class FullscreenModeConfig(override val comment: String) : ConfigEnum {
 
     ;
 
-    override val translation = TranslationTextComponent("borderless.config.fullscreen_mode.${name.toLowerCase()}")
+    override val translation = TranslationTextComponent("borderless.config.fullscreen_mode.${name.lowercase()}")
 }

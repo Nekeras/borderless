@@ -35,12 +35,14 @@ object FullscreenModeHolder {
     private var fullscreenMode: FullscreenMode? by Delegates.observable(null) { _, oldValue, newValue ->
         log.info("Detected fullscreen mode change from $oldValue to $newValue")
         oldValue?.reset(window)
-        log.info("Refreshing $fullscreenMode")
+        log.info("Refreshing $newValue")
 
-        if (window.isFullscreen) {
-            newValue?.apply(window)
-        } else {
-            newValue?.reset(window)
+        newValue?.let {
+            if (window.isFullscreen) {
+                it.apply(window)
+            } else {
+                it.reset(window)
+            }
         }
     }
 

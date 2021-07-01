@@ -36,7 +36,6 @@ class SizeChangedWindowEventListener(
     }
 
     override fun cursorEntered() {
-        log.info("Window cursor entered")
         parent?.cursorEntered()
     }
 

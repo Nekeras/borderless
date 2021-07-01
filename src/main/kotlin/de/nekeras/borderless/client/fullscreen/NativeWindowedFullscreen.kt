@@ -1,6 +1,8 @@
 package de.nekeras.borderless.client.fullscreen
 
-import de.nekeras.borderless.client.tryGetMonitor
+import de.nekeras.borderless.Glfw
+import de.nekeras.borderless.Glfw.disableWindowAttribute
+import de.nekeras.borderless.Glfw.tryGetMonitor
 import de.nekeras.borderless.logger
 import net.minecraft.client.MainWindow
 import net.minecraftforge.api.distmarker.Dist
@@ -16,8 +18,9 @@ object NativeWindowedFullscreen : FullscreenMode {
     private val log by logger()
 
     override fun apply(window: MainWindow) {
-        log.info("Apply")
-        GLFW.glfwSetWindowAttrib(window.window, GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE)
+        super.apply(window)
+
+        window.disableWindowAttribute(Glfw.WindowAttribute.AUTO_ICONIFY)
         GLFW.glfwSetWindowFocusCallback(window.window) { _, focused ->
             if (focused) {
                 onFocusGained(window)
@@ -28,8 +31,7 @@ object NativeWindowedFullscreen : FullscreenMode {
     }
 
     override fun reset(window: MainWindow) {
-        log.info("Reset")
-        GLFW.glfwSetWindowAttrib(window.window, GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_TRUE)
+        super.reset(window)
         GLFW.glfwSetWindowFocusCallback(window.window, null)
     }
 

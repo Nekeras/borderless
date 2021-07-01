@@ -1,7 +1,9 @@
 package de.nekeras.borderless.client.fullscreen
 
-import de.nekeras.borderless.client.name
-import de.nekeras.borderless.client.tryGetMonitor
+import de.nekeras.borderless.Glfw
+import de.nekeras.borderless.Glfw.disableWindowAttribute
+import de.nekeras.borderless.Glfw.name
+import de.nekeras.borderless.Glfw.tryGetMonitor
 import de.nekeras.borderless.logger
 import net.minecraft.client.MainWindow
 import net.minecraftforge.api.distmarker.Dist
@@ -18,6 +20,8 @@ object BorderlessFullscreen : FullscreenMode {
     private val log by logger()
 
     override fun apply(window: MainWindow) {
+        super.apply(window)
+        
         window.tryGetMonitor(log) { monitor ->
             val videoMode = monitor.currentMode
             val x = monitor.x
@@ -26,13 +30,8 @@ object BorderlessFullscreen : FullscreenMode {
             val height = videoMode.height
 
             log.info("Apply on monitor ${monitor.name} at ($x | $y) size ($width x $height)")
-            GLFW.glfwSetWindowAttrib(window.window, GLFW.GLFW_DECORATED, GLFW.GLFW_FALSE)
+            window.disableWindowAttribute(Glfw.WindowAttribute.DECORATED)
             GLFW.glfwSetWindowMonitor(window.window, 0, x, y, width, height, GLFW.GLFW_DONT_CARE)
         }
-    }
-
-    override fun reset(window: MainWindow) {
-        log.info("Reset")
-        GLFW.glfwSetWindowAttrib(window.window, GLFW.GLFW_DECORATED, GLFW.GLFW_TRUE)
     }
 }
