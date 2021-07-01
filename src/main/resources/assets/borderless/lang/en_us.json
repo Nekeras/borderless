@@ -5,6 +5,7 @@
   "borderless.config.apply": "Apply",
   "borderless.config.enabled": "Enabled",
   "borderless.config.enabled.tooltip": "Enable/disable Borderless Window",
+  "borderless.config.disabled.description": "Borderless Window is disabled, standard Minecraft fullscreen is used.",
   "borderless.config.fullscreen_mode": "Fullscreen Mode",
   "borderless.config.fullscreen_mode.best": "Best",
   "borderless.config.fullscreen_mode.borderless": "Borderless",

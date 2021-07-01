@@ -84,11 +84,13 @@ class ConfigScreen(private val parent: Screen) : Screen(titleText) {
     }
 
     private fun renderDescription(width: Int) = withMinecraft {
-        if (ConfigScreenOption.enabled.get(options)) {
-            val x = getHorizontalLayoutStart(width)
-            val y: Int = LINE_HEIGHT * 5
+        val x = getHorizontalLayoutStart(width)
+        val y: Int = LINE_HEIGHT * 5
 
+        if (ConfigScreenOption.enabled.get(options)) {
             font.drawWordWrap(TranslationTextComponent(getDescriptionKey(options)), x, y, LAYOUT_MAX_WIDTH, WHITE)
+        } else {
+            font.drawWordWrap(disabledDescription, x, y, LAYOUT_MAX_WIDTH, RED)
         }
     }
 
@@ -129,10 +131,12 @@ class ConfigScreen(private val parent: Screen) : Screen(titleText) {
         private const val LAYOUT_MAX_WIDTH = 250
         private const val WHITE = 0xffffff
         private const val YELLOW = 0xffff00
+        private const val RED = 0xff0000
         private const val LINE_HEIGHT = 25
 
         private val titleText = TranslationTextComponent("borderless.config.title")
         private val applyText = TranslationTextComponent("borderless.config.apply")
         private val changedWarningText = TranslationTextComponent("borderless.config.changed")
+        private val disabledDescription = TranslationTextComponent("borderless.config.disabled.description")
     }
 }
