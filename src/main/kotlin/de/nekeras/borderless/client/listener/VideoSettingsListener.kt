@@ -2,7 +2,7 @@ package de.nekeras.borderless.client.listener
 
 import de.nekeras.borderless.client.gui.ButtonOption
 import de.nekeras.borderless.client.gui.ConfigScreen
-import de.nekeras.borderless.makeFieldAccessible
+import de.nekeras.borderless.tryMakeFieldAccessible
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screen.VideoSettingsScreen
 import net.minecraft.client.gui.widget.list.OptionsRowList
@@ -14,7 +14,7 @@ object VideoSettingsListener {
     private const val TITLE_KEY = "borderless.config.video_settings_button"
 
     private val tooltip = TranslationTextComponent("${TITLE_KEY}.tooltip")
-    private val VideoSettingsScreen.optionsRowList by makeFieldAccessible<VideoSettingsScreen, OptionsRowList?>()
+    private val VideoSettingsScreen.optionsRowList by tryMakeFieldAccessible<VideoSettingsScreen, OptionsRowList>()
 
     fun onVideoSettings(event: GuiScreenEvent.InitGuiEvent.Post) {
         val gui = event.gui

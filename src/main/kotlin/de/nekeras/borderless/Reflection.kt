@@ -1,5 +1,6 @@
 package de.nekeras.borderless
 
+import org.apache.logging.log4j.Logger
 import java.lang.reflect.Field
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -18,13 +19,33 @@ inline fun <reified C : Any, reified F : Any?> findFieldOfType(): Field =
     } ?: throw NoSuchFieldException("Could not find field of type ${F::class} in class ${C::class}")
 
 /**
+ * Tries to find the first [Field] inside a class [C] of type [F]. If there is no such field of type [F] in this class,
+ * this method will return null and optionally log an error to the supplied [log]. Supports private/protected fields.
+ */
+inline fun <reified C : Any, reified F : Any?> tryFindFieldOfType(log: Logger? = null): Field? =
+    try {
+        findFieldOfType<C, F>()
+    } catch (ex: NoSuchFieldException) {
+        log?.error(ex.message)
+        null
+    }
+
+/**
  * Makes a field inside a class [C] of type [F] accessible through a [ReadWriteProperty] with getter and setter
  * functions. If there is no such field of type [F] in this class, this method will throw [NoSuchFieldException].
  * Supports private/protected fields.
  */
 @Throws(NoSuchFieldException::class)
-inline fun <reified C : Any, reified F : Any?> makeFieldAccessible(): AccessibleField<C, F> =
+inline fun <reified C : Any, reified F : Any?> makeFieldAccessible(): ReadWriteProperty<C, F> =
     AccessibleField(findFieldOfType<C, F>())
+
+/**
+ * Tries to make a field inside a class [C] of type [F] accessible through a [ReadWriteProperty] with getter and setter
+ * functions. If there is no such field of type [F] in this class, this method will return null for [F] and optionally
+ * log an error to the supplied [log]. Supports private/protected fields.
+ */
+inline fun <reified C : Any, reified F : Any?> tryMakeFieldAccessible(log: Logger? = null): ReadWriteProperty<C, F?> =
+    tryFindFieldOfType<C, F>(log)?.let { AccessibleField(it) } ?: NoAccessibleField()
 
 @JvmInline
 value class AccessibleField<C : Any, F : Any?>(private val field: Field) : ReadWriteProperty<C, F> {
@@ -34,5 +55,13 @@ value class AccessibleField<C : Any, F : Any?>(private val field: Field) : ReadW
 
     override fun setValue(thisRef: C, property: KProperty<*>, value: F) {
         field.set(thisRef, value)
+    }
+}
+
+class NoAccessibleField<C : Any, F : Any?> : ReadWriteProperty<C, F?> {
+
+    override fun getValue(thisRef: C, property: KProperty<*>): F? = null
+
+    override fun setValue(thisRef: C, property: KProperty<*>, value: F?) {
     }
 }
