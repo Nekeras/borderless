@@ -10,32 +10,30 @@ plugins {
 group = "de.nekeras"
 version = "$minecraftVersion-$modVersion"
 
-configurations {
-    maybeCreate("fatJar")
+val fatJar: Configuration by configurations.creating
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
     minecraft(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
 
-    "fatJar"(kotlin("stdlib"))
-    "fatJar"(kotlin("reflect"))
+    fatJar(kotlin("stdlib"))
+    fatJar(kotlin("reflect"))
 }
 
 minecraft {
     mappings("official", minecraftVersion)
 
-    runs {
-        maybeCreate("client").apply {
-            workingDirectory(project.file("run"))
+    val client by runs.creating {
+        workingDirectory(project.file("run"))
 
-            property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
-            property("forge.logging.console.level", "debug")
+        property("forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP")
+        property("forge.logging.console.level", "debug")
 
-            mods {
-                maybeCreate("borderless").apply {
-                    source(sourceSets.main.get())
-                }
-            }
+        val borderless by mods.creating {
+            source(sourceSets.main.get())
         }
     }
 }
@@ -46,9 +44,7 @@ tasks.processResources {
 
     from(sourceSets.main.get().resources.srcDirs) {
         include("META-INF/mods.toml")
-        expand(
-            "version" to project.version
-        )
+        expand("version" to project.version)
     }
 }
 
@@ -59,6 +55,8 @@ tasks.compileKotlin {
 }
 
 tasks.jar {
+    archiveBaseName.set("${project.name}-min")
+
     manifest {
         attributes(
             "Specification-Title" to project.name,
@@ -69,12 +67,21 @@ tasks.jar {
             "Implementation-Vendor" to "Nekeras"
         )
     }
+}
 
-    from(configurations.named("fatJar").get().map { dependencyArchive ->
+val buildFatJar by tasks.creating(Jar::class.java) {
+    archiveBaseName.set(project.name)
+
+    with(tasks.jar.get())
+    from(fatJar.map { dependencyArchive ->
         zipTree(dependencyArchive).matching {
             exclude {
                 it.relativePath.segments.getOrNull(index = 0) == "META-INF"
             }
         }
     })
+}
+
+tasks.build {
+    dependsOn(buildFatJar)
 }
