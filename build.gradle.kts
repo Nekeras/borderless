@@ -10,8 +10,6 @@ plugins {
 group = "de.nekeras"
 version = "$minecraftVersion-$modVersion"
 
-val fatJar: Configuration by configurations.creating
-
 repositories {
     mavenCentral()
 }
@@ -19,8 +17,8 @@ repositories {
 dependencies {
     minecraft(group = "net.minecraftforge", name = "forge", version = "$minecraftVersion-$forgeVersion")
 
-    fatJar(kotlin("stdlib"))
-    fatJar(kotlin("reflect"))
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
 }
 
 minecraft {
@@ -37,16 +35,17 @@ minecraft {
         }
     }
 }
-tasks.processResources {
-    doFirst {
-        delete(File(sourceSets.main.get().output.resourcesDir, "/META-INF/mods.toml"))
-    }
 
-    from(sourceSets.main.get().resources.srcDirs) {
-        include("META-INF/mods.toml")
-        expand("version" to project.version)
-    }
-}
+// tasks.processResources {
+//     doFirst {
+//         delete(File(sourceSets.main.get().output.resourcesDir, "/META-INF/mods.toml"))
+//     }
+//
+//     from(sourceSets.main.get().resources.srcDirs) {
+//         include("META-INF/mods.toml")
+//         expand("version" to project.version)
+//     }
+// }
 
 tasks.compileKotlin {
     kotlinOptions {
@@ -73,13 +72,14 @@ val buildFatJar by tasks.creating(Jar::class.java) {
     archiveBaseName.set(project.name)
 
     with(tasks.jar.get())
-    from(fatJar.map { dependencyArchive ->
+
+    /*from(configurations.runtimeClasspath.get().map { dependencyArchive ->
         zipTree(dependencyArchive).matching {
             exclude {
                 it.relativePath.segments.getOrNull(index = 0) == "META-INF"
             }
         }
-    })
+    })*/
 }
 
 tasks.build {

@@ -6,12 +6,12 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             when (requested.id.id) {
-                "net.minecraftforge.gradle" -> useModule("net.minecraftforge.gradle:ForgeGradle:5.0.0")
+                "net.minecraftforge.gradle" -> useModule("net.minecraftforge.gradle:ForgeGradle:5.1.+")
             }
         }
     }
     plugins {
-        kotlin("jvm") version "1.5.0"
+        kotlin("jvm") version "1.5.20"
         id("org.jlleitschuh.gradle.ktlint") version "9.4.0"
     }
 }
