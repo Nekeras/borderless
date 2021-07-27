@@ -29,21 +29,15 @@ public class Config {
     @Nonnull
     public static FullscreenDisplayMode getFullscreenDisplayMode() {
         if (GENERAL.enabled.get()) {
-            switch (GENERAL.fullscreenMode.get()) {
-                case BEST:
-                    return DesktopEnvironment.get().getBestFullscreenDisplayMode();
-                case BORDERLESS:
-                    return FullscreenDisplayMode.BORDERLESS;
-                case NATIVE:
-                    switch (GENERAL.focusLoss.get()) {
-                        case MINIMIZE:
-                            return FullscreenDisplayMode.NATIVE;
-                        case DO_NOTHING:
-                            return FullscreenDisplayMode.NATIVE_NON_ICONIFY;
-                        case SWITCH_TO_WINDOWED:
-                            return FullscreenDisplayMode.NATIVE_SWITCH_TO_WINDOWED;
-                    }
-            }
+            return switch (GENERAL.fullscreenMode.get()) {
+                case BEST -> DesktopEnvironment.get().getBestFullscreenDisplayMode();
+                case BORDERLESS -> FullscreenDisplayMode.BORDERLESS;
+                case NATIVE -> switch (GENERAL.focusLoss.get()) {
+                    case MINIMIZE -> FullscreenDisplayMode.NATIVE;
+                    case DO_NOTHING -> FullscreenDisplayMode.NATIVE_NON_ICONIFY;
+                    case SWITCH_TO_WINDOWED -> FullscreenDisplayMode.NATIVE_SWITCH_TO_WINDOWED;
+                };
+            };
         }
 
         return FullscreenDisplayMode.NATIVE;

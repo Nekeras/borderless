@@ -5,10 +5,10 @@ import de.nekeras.borderless.client.ReflectionUtils;
 import de.nekeras.borderless.client.gui.ButtonOption;
 import de.nekeras.borderless.client.gui.ConfigScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.VideoSettingsScreen;
-import net.minecraft.client.gui.widget.list.OptionsRowList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.OptionsList;
+import net.minecraft.client.gui.screens.VideoSettingsScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -25,32 +25,36 @@ import java.util.List;
 public class VideoSettingsListener {
 
     private static final String TITLE_KEY = "borderless.config.video_settings_button";
-    private static final ITextComponent tooltip = new TranslationTextComponent("borderless.config.video_settings_button.tooltip");
+    private static final Component tooltip = new TranslatableComponent("borderless.config.video_settings_button.tooltip");
     private static final Logger log = LogManager.getLogger();
 
     @SubscribeEvent
     public static void onVideoSettings(@Nonnull GuiScreenEvent.InitGuiEvent.Post event) {
-        if (event.getGui() instanceof VideoSettingsScreen) {
-            VideoSettingsScreen screen = (VideoSettingsScreen) event.getGui();
+        if (event.getGui() instanceof VideoSettingsScreen screen) {
             log.info("Opened VideoSettingsScreen");
 
-            ReflectionUtils.getOptionsRowList(screen).ifPresent(
-                    optionsRowList -> addToOptionsRowList(screen, optionsRowList));
+            ReflectionUtils.getOptionsList(screen).ifPresent(optionsList -> addToOptionsList(screen, optionsList));
         }
     }
 
-    private static void addToOptionsRowList(@Nonnull VideoSettingsScreen screen, @Nonnull OptionsRowList optionsRowList) {
-        log.info("Found OptionsRowList");
+    private static void addToOptionsList(@Nonnull VideoSettingsScreen screen, @Nonnull OptionsList optionsRowList) {
+        log.info("Found OptionsList");
         Minecraft minecraft = Minecraft.getInstance();
 
         ButtonOption fullscreenOption = new ButtonOption(TITLE_KEY,
                 btn -> minecraft.setScreen(new ConfigScreen(screen)));
-        fullscreenOption.setTooltip(minecraft.font.split(tooltip, 200));
 
         optionsRowList.addBig(fullscreenOption);
-        List<OptionsRowList.Row> widgets = optionsRowList.children();
-        OptionsRowList.Row lastElement = widgets.remove(widgets.size() - 1);
-        widgets.add(0, lastElement);
-        log.info("Added Borderless Window Config Screen to OptionsRowList");
+        moveLastEntryToStart(optionsRowList.children());
+        log.info("Added Borderless Window Config Screen to OptionsList");
+    }
+
+    private static <T> void moveLastEntryToStart(List<T> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+
+        T lastElement = list.remove(list.size() - 1);
+        list.add(0, lastElement);
     }
 }

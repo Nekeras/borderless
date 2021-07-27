@@ -1,7 +1,8 @@
 package de.nekeras.borderless.config;
 
 import de.nekeras.borderless.util.Translatable;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nonnull;
 
@@ -36,11 +37,11 @@ public enum FullscreenModeConfig implements Translatable {
     private static final String BASE_KEY = "borderless.config.fullscreen_mode.%s";
 
     private final String comment;
-    private final TranslationTextComponent translation;
+    private final TranslatableComponent translation;
 
     FullscreenModeConfig(@Nonnull String comment) {
         this.comment = comment;
-        this.translation = new TranslationTextComponent(String.format(BASE_KEY, name().toLowerCase()));
+        this.translation = new TranslatableComponent(String.format(BASE_KEY, name().toLowerCase()));
     }
 
     /**
@@ -53,7 +54,7 @@ public enum FullscreenModeConfig implements Translatable {
     }
 
     @Override
-    public TranslationTextComponent getTranslation() {
+    public Component getTranslation() {
         return translation;
     }
 

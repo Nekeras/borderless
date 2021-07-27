@@ -1,10 +1,10 @@
 package de.nekeras.borderless.client.fullscreen;
 
+import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.VideoMode;
+import com.mojang.blaze3d.platform.Window;
 import de.nekeras.borderless.client.GlfwUtils;
 import de.nekeras.borderless.client.GlfwWindowAttribute;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Monitor;
-import net.minecraft.client.renderer.VideoMode;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +23,7 @@ public class BorderlessFullscreenDisplay implements FullscreenDisplayMode {
     private static final Logger log = LogManager.getLogger();
 
     @Override
-    public void apply(@Nonnull MainWindow window) {
+    public void apply(@Nonnull Window window) {
         FullscreenDisplayMode.super.apply(window);
 
         Monitor monitor = GlfwUtils.tryGetMonitor(window).orElse(null);
@@ -46,7 +46,7 @@ public class BorderlessFullscreenDisplay implements FullscreenDisplayMode {
     }
 
     @Override
-    public void reset(@Nonnull MainWindow window) {
+    public void reset(@Nonnull Window window) {
         FullscreenDisplayMode.super.reset(window);
 
         if (window.isFullscreen()) {

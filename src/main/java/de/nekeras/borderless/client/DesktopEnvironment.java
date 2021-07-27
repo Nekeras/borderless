@@ -65,12 +65,9 @@ public enum DesktopEnvironment {
         DesktopEnvironment current = null;
 
         switch (Platform.get()) {
-            case WINDOWS:
-                current = WINDOWS;
-                break;
-            case LINUX:
+            case WINDOWS -> current = WINDOWS;
+            case LINUX -> {
                 String result = System.getenv(LINUX_WINDOW_SYSTEM_VARIABLE);
-
                 if (X11_NAME.equalsIgnoreCase(result)) {
                     current = X11;
                 } else if (WAYLAND_NAME.equalsIgnoreCase(result)) {
@@ -79,11 +76,8 @@ public enum DesktopEnvironment {
                     current = GENERIC;
                     log.warn("Unknown window system: {}", result);
                 }
-
-                break;
-            case MACOSX:
-                current = GENERIC;
-                break;
+            }
+            case MACOSX -> current = GENERIC;
         }
 
         CURRENT = current;

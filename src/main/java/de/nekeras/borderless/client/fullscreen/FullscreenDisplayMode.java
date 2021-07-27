@@ -1,7 +1,7 @@
 package de.nekeras.borderless.client.fullscreen;
 
+import com.mojang.blaze3d.platform.Window;
 import de.nekeras.borderless.client.GlfwUtils;
-import net.minecraft.client.MainWindow;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -45,7 +45,7 @@ public interface FullscreenDisplayMode {
      *
      * @param window The window
      */
-    default void apply(@Nonnull MainWindow window) {
+    default void apply(@Nonnull Window window) {
         GlfwUtils.applyDefaultWindowAttributes(window);
     }
 
@@ -55,7 +55,7 @@ public interface FullscreenDisplayMode {
      *
      * @param window The window
      */
-    default void reset(@Nonnull MainWindow window) {
+    default void reset(@Nonnull Window window) {
         GlfwUtils.applyDefaultWindowAttributes(window);
     }
 }

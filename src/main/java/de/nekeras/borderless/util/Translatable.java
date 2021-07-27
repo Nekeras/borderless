@@ -1,16 +1,16 @@
 package de.nekeras.borderless.util;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 /**
- * Indicates a type which may be translated by a {@link ITextComponent}.
+ * Indicates a type which may be translated by a {@link Component}.
  */
 public interface Translatable {
 
     /**
      * The localization message for this instance.
      *
-     * @return The message as an {@link ITextComponent}.
+     * @return The message as an {@link Component}.
      */
-    ITextComponent getTranslation();
+    Component getTranslation();
 }

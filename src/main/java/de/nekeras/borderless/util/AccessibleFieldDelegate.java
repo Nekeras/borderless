@@ -1,8 +1,5 @@
 package de.nekeras.borderless.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -19,8 +16,6 @@ import java.util.function.Function;
  * @see #AccessibleFieldDelegate(Class, Class, Function)
  */
 public class AccessibleFieldDelegate<C, F> {
-
-    private static final Logger log = LogManager.getLogger();
 
     private final Field field;
     private Function<C, F> defaultSupplier;

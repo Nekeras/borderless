@@ -1,17 +1,17 @@
 package de.nekeras.borderless.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import de.nekeras.borderless.client.FullscreenDisplayModeHolder;
 import de.nekeras.borderless.config.Config;
 import de.nekeras.borderless.config.FocusLossConfig;
 import de.nekeras.borderless.config.FullscreenModeConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.DialogTexts;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -28,17 +28,17 @@ public class ConfigScreen extends Screen {
     private static final int YELLOW = 0xffff00;
     private static final int RED = 0xff0000;
     private static final int LINE_HEIGHT = 25;
-    private static final ITextComponent titleText = new TranslationTextComponent("borderless.config.title");
-    private static final ITextComponent applyText = new TranslationTextComponent("borderless.config.apply");
-    private static final ITextComponent changedWarningText = new TranslationTextComponent("borderless.config.changed");
-    private static final ITextComponent disabledText = new TranslationTextComponent("borderless.config.disabled.description");
+    private static final Component titleText = new TranslatableComponent("borderless.config.title");
+    private static final Component applyText = new TranslatableComponent("borderless.config.apply");
+    private static final Component changedWarningText = new TranslatableComponent("borderless.config.changed");
+    private static final Component disabledText = new TranslatableComponent("borderless.config.disabled.description");
     private static final Logger log = LogManager.getLogger();
 
     private final Screen parent;
 
-    private Widget enabledButton;
-    private Widget fullscreenModeButton;
-    private Widget focusLossButton;
+    private AbstractWidget enabledButton;
+    private AbstractWidget fullscreenModeButton;
+    private AbstractWidget focusLossButton;
 
     public ConfigScreen(@Nonnull Screen parent) {
         super(titleText);
@@ -66,7 +66,7 @@ public class ConfigScreen extends Screen {
             onClose();
         });
 
-        Button cancelButton = new Button(width / 2 + 25, height - 75, 100, 20, DialogTexts.GUI_CANCEL, btn -> {
+        Button cancelButton = new Button(width / 2 + 25, height - 75, 100, 20, CommonComponents.GUI_CANCEL, btn -> {
             log.info("Cancel button in Borderless Window Config Screen pressed, resetting to {}, {}, {}",
                     initialEnabledState, initialFullscreenMode, initialFocusLossMode);
             Config.GENERAL.enabled.set(initialEnabledState);
@@ -75,11 +75,11 @@ public class ConfigScreen extends Screen {
             onClose();
         });
 
-        addButton(enabledButton);
-        addButton(fullscreenModeButton);
-        addButton(focusLossButton);
-        addButton(applyButton);
-        addButton(cancelButton);
+        addRenderableWidget(enabledButton);
+        addRenderableWidget(fullscreenModeButton);
+        addRenderableWidget(focusLossButton);
+        addRenderableWidget(applyButton);
+        addRenderableWidget(cancelButton);
 
         refreshButtonStates();
     }
@@ -92,7 +92,7 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float frameTime) {
+    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float frameTime) {
         Minecraft minecraft = Minecraft.getInstance();
 
         this.renderBackground(matrixStack);
@@ -110,7 +110,7 @@ public class ConfigScreen extends Screen {
         Minecraft.getInstance().setScreen(parent);
     }
 
-    private void renderTitle(@Nonnull MatrixStack matrixStack, @Nonnull Minecraft minecraft, int width) {
+    private void renderTitle(@Nonnull PoseStack matrixStack, @Nonnull Minecraft minecraft, int width) {
         drawCenteredString(matrixStack, minecraft.font, title, width / 2, 20, WHITE);
     }
 
@@ -118,8 +118,8 @@ public class ConfigScreen extends Screen {
         int x = getHorizontalLayoutStart(width);
         int y = LINE_HEIGHT * 5;
 
-        if (ConfigScreenOption.enabled.get(minecraft.options)) {
-            minecraft.font.drawWordWrap(new TranslationTextComponent(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
+        if (Config.GENERAL.enabled.get()) {
+            minecraft.font.drawWordWrap(new TranslatableComponent(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
         } else {
             minecraft.font.drawWordWrap(disabledText, x, y, LAYOUT_MAX_WIDTH, RED);
         }
@@ -133,28 +133,24 @@ public class ConfigScreen extends Screen {
     }
 
     private String getDescriptionKey() {
-        Minecraft minecraft = Minecraft.getInstance();
-
-        FullscreenModeConfig mode = ConfigScreenOption.fullscreenMode.getValue(minecraft.options);
+        FullscreenModeConfig mode = Config.GENERAL.fullscreenMode.get();
         String modeKey = String.format(DESCRIPTION_KEY_BASE, mode.name().toLowerCase());
 
         if (mode != FullscreenModeConfig.NATIVE) {
             return modeKey;
         } else {
-            FocusLossConfig focusLoss = ConfigScreenOption.focusLoss.getValue(minecraft.options);
+            FocusLossConfig focusLoss = Config.GENERAL.focusLoss.get();
 
             return String.format("%s.%s", modeKey, focusLoss.name().toLowerCase());
         }
     }
 
     private void refreshButtonStates() {
-        Minecraft minecraft = Minecraft.getInstance();
+        boolean enabled = Config.GENERAL.enabled.get();
 
-        boolean enabled = ConfigScreenOption.enabled.get(minecraft.options);
-
+        enabledButton.visible = true;
         fullscreenModeButton.visible = enabled;
-        focusLossButton.visible = enabled &&
-                ConfigScreenOption.fullscreenMode.getValue(minecraft.options) == FullscreenModeConfig.NATIVE;
+        focusLossButton.visible = enabled && Config.GENERAL.fullscreenMode.get() == FullscreenModeConfig.NATIVE;
     }
 
     private int getHorizontalLayoutStart(int width) {

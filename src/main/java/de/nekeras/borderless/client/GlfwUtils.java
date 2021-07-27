@@ -1,7 +1,7 @@
 package de.nekeras.borderless.client;
 
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Monitor;
+import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +48,7 @@ public final class GlfwUtils {
      * @return The monitor wrapped in an {@link Optional}.
      */
     @Nonnull
-    public static Optional<Monitor> tryGetMonitor(@Nonnull MainWindow window) {
+    public static Optional<Monitor> tryGetMonitor(@Nonnull Window window) {
         Monitor monitor = window.findBestMonitor();
 
         if (monitor == null) {
@@ -64,7 +64,7 @@ public final class GlfwUtils {
      * @param window    The window
      * @param attribute The attribute
      */
-    public static void enableWindowAttribute(@Nonnull MainWindow window, @Nonnull GlfwWindowAttribute attribute) {
+    public static void enableWindowAttribute(@Nonnull Window window, @Nonnull GlfwWindowAttribute attribute) {
         log.info("Enable window attribute {}", attribute.name());
         GLFW.glfwSetWindowAttrib(window.getWindow(), attribute.getBit(), GLFW.GLFW_TRUE);
     }
@@ -75,7 +75,7 @@ public final class GlfwUtils {
      * @param window    The window
      * @param attribute The attribute
      */
-    public static void disableWindowAttribute(@Nonnull MainWindow window, @Nonnull GlfwWindowAttribute attribute) {
+    public static void disableWindowAttribute(@Nonnull Window window, @Nonnull GlfwWindowAttribute attribute) {
         log.info("Enable window attribute {}", attribute.name());
         GLFW.glfwSetWindowAttrib(window.getWindow(), attribute.getBit(), GLFW.GLFW_FALSE);
     }
@@ -85,7 +85,7 @@ public final class GlfwUtils {
      *
      * @param window The window
      */
-    public static void applyDefaultWindowAttributes(@Nonnull MainWindow window) {
+    public static void applyDefaultWindowAttributes(@Nonnull Window window) {
         log.info("Resetting window attributes");
 
         for (GlfwWindowAttribute attribute : GlfwWindowAttribute.values()) {

@@ -1,6 +1,5 @@
 package de.nekeras.borderless.client.fullscreen;
 
-import net.minecraft.client.MainWindow;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

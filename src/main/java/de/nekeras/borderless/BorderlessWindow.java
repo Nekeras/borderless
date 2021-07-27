@@ -5,14 +5,14 @@ import de.nekeras.borderless.config.Config;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.network.FMLNetworkConstants;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraftforge.fmlclient.ConfigGuiHandler;
+import net.minecraftforge.fmllegacy.network.FMLNetworkConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,9 +37,8 @@ public class BorderlessWindow {
         ModLoadingContext context = ModLoadingContext.get();
 
         log.info("Enable server compatibility");
-        context.registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(
-                () -> FMLNetworkConstants.IGNORESERVERONLY,
-                (a, b) -> true));
+        context.registerExtensionPoint(IExtensionPoint.DisplayTest.class, () ->
+                new IExtensionPoint.DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
         log.info("Register client configuration");
         context.registerConfig(ModConfig.Type.CLIENT, Config.CONFIG_SPEC);
@@ -52,8 +51,8 @@ public class BorderlessWindow {
         ModLoadingContext context = ModLoadingContext.get();
 
         log.info("Register client configuration screen");
-        context.registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () ->
-                (mc, modListScreen) -> new ConfigScreen(modListScreen));
+        context.registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () ->
+                new ConfigGuiHandler.ConfigGuiFactory((mc, modListScreen) -> new ConfigScreen(modListScreen)));
 
         log.info("Enqueue initialization work to main thread");
         event.enqueueWork(de.nekeras.borderless.client.FullscreenDisplayModeHolder::initMinecraft);

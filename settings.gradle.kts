@@ -1,6 +1,7 @@
 pluginManagement {
     repositories {
         maven("https://maven.minecraftforge.net")
+        mavenCentral()
     }
     resolutionStrategy {
         eachPlugin {

@@ -1,10 +1,10 @@
 package de.nekeras.borderless.client;
 
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.platform.WindowEventHandler;
 import de.nekeras.borderless.util.AccessibleFieldDelegate;
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.gui.screen.VideoSettingsScreen;
-import net.minecraft.client.gui.widget.list.OptionsRowList;
-import net.minecraft.client.renderer.IWindowEventListener;
+import net.minecraft.client.gui.components.OptionsList;
+import net.minecraft.client.gui.screens.VideoSettingsScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallbackI;
@@ -21,10 +21,10 @@ import java.util.function.Function;
 @OnlyIn(Dist.CLIENT)
 public final class ReflectionUtils {
 
-    private static final AccessibleFieldDelegate<MainWindow, IWindowEventListener> windowEventListenerAccessor =
-            makeFieldAccessible(MainWindow.class, IWindowEventListener.class);
-    private static final AccessibleFieldDelegate<VideoSettingsScreen, OptionsRowList> optionsRowListAccessor =
-            tryMakeFieldAccessible(VideoSettingsScreen.class, OptionsRowList.class, thisRef -> null);
+    private static final AccessibleFieldDelegate<Window, WindowEventHandler> windowEventListenerAccessor =
+            makeFieldAccessible(Window.class, WindowEventHandler.class);
+    private static final AccessibleFieldDelegate<VideoSettingsScreen, OptionsList> optionsListAccessor =
+            tryMakeFieldAccessible(VideoSettingsScreen.class, OptionsList.class, thisRef -> null);
 
     private ReflectionUtils() {
     }
@@ -36,6 +36,7 @@ public final class ReflectionUtils {
      * @param fieldType The field to access
      * @throws IllegalStateException If there is no such field of type <code>F</code>
      */
+    @SuppressWarnings("SameParameterValue") // might be needed in future
     @Nonnull
     private static <C, F> AccessibleFieldDelegate<C, F> makeFieldAccessible(@Nonnull Class<C> inClass, @Nonnull Class<F> fieldType) {
         try {
@@ -53,9 +54,10 @@ public final class ReflectionUtils {
      * @param fieldType       The field to access
      * @param defaultSupplier The supplier which is called in when retrieving the value if the field was not found
      */
+    @SuppressWarnings("SameParameterValue") // might be needed in future
     @Nonnull
     private static <C, F> AccessibleFieldDelegate<C, F> tryMakeFieldAccessible(@Nonnull Class<C> inClass, @Nonnull Class<F> fieldType, @Nonnull Function<C, F> defaultSupplier) {
-        return new AccessibleFieldDelegate<C, F>(inClass, fieldType, defaultSupplier);
+        return new AccessibleFieldDelegate<>(inClass, fieldType, defaultSupplier);
     }
 
     /**
@@ -79,9 +81,9 @@ public final class ReflectionUtils {
      *                       {@link IWindowEventListener} field in the {@link MainWindow} instance
      *                       and returns a new value that should be assigned
      */
-    public static void updateWindowEventListener(@Nonnull MainWindow window, @Nonnull Function<IWindowEventListener, IWindowEventListener> updateSupplier) {
-        IWindowEventListener oldListener = windowEventListenerAccessor.getValue(window);
-        IWindowEventListener newListener = updateSupplier.apply(oldListener);
+    public static void updateWindowEventListener(@Nonnull Window window, @Nonnull Function<WindowEventHandler, WindowEventHandler> updateSupplier) {
+        WindowEventHandler oldListener = windowEventListenerAccessor.getValue(window);
+        WindowEventHandler newListener = updateSupplier.apply(oldListener);
         windowEventListenerAccessor.setValue(window, newListener);
     }
 
@@ -93,7 +95,7 @@ public final class ReflectionUtils {
      * @return The options row list if it exists
      */
     @Nonnull
-    public static Optional<OptionsRowList> getOptionsRowList(@Nonnull VideoSettingsScreen screen) {
-        return Optional.ofNullable(optionsRowListAccessor.getValue(screen));
+    public static Optional<OptionsList> getOptionsList(@Nonnull VideoSettingsScreen screen) {
+        return Optional.ofNullable(optionsListAccessor.getValue(screen));
     }
 }

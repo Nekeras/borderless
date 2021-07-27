@@ -2,7 +2,8 @@ package de.nekeras.borderless.config;
 
 import de.nekeras.borderless.client.fullscreen.FullscreenDisplayMode;
 import de.nekeras.borderless.util.Translatable;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * Settings for a focus loss behaviour that is applied on a fullscreen window. These setting will
@@ -38,11 +39,11 @@ public enum FocusLossConfig implements Translatable {
     private static final String BASE_KEY = "borderless.config.focus_loss.%s";
 
     private final String comment;
-    private final TranslationTextComponent translation;
+    private final TranslatableComponent translation;
 
     FocusLossConfig(String comment) {
         this.comment = comment;
-        this.translation = new TranslationTextComponent(String.format(BASE_KEY, name().toLowerCase()));
+        this.translation = new TranslatableComponent(String.format(BASE_KEY, name().toLowerCase()));
     }
 
     /**
@@ -55,7 +56,7 @@ public enum FocusLossConfig implements Translatable {
     }
 
     @Override
-    public TranslationTextComponent getTranslation() {
+    public Component getTranslation() {
         return translation;
     }
 

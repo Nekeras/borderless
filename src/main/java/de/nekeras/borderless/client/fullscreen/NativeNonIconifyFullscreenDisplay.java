@@ -1,8 +1,8 @@
 package de.nekeras.borderless.client.fullscreen;
 
+import com.mojang.blaze3d.platform.Window;
 import de.nekeras.borderless.client.GlfwUtils;
 import de.nekeras.borderless.client.GlfwWindowAttribute;
-import net.minecraft.client.MainWindow;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 public class NativeNonIconifyFullscreenDisplay implements FullscreenDisplayMode {
 
     @Override
-    public void apply(@Nonnull MainWindow window) {
+    public void apply(@Nonnull Window window) {
         FullscreenDisplayMode.super.apply(window);
 
         GlfwUtils.disableWindowAttribute(window, GlfwWindowAttribute.AUTO_ICONIFY);

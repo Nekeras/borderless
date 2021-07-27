@@ -1,18 +1,16 @@
 package de.nekeras.borderless.client;
 
+import com.mojang.blaze3d.platform.Window;
 import de.nekeras.borderless.client.fullscreen.FullscreenDisplayMode;
 import de.nekeras.borderless.client.listener.SizeChangedWindowEventListener;
 import de.nekeras.borderless.config.Config;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 /**
  * Singleton class holding the current fullscreen display mode.
@@ -21,7 +19,7 @@ import java.util.Optional;
 public class FullscreenDisplayModeHolder {
 
     private static final Logger log = LogManager.getLogger();
-    private static final MainWindow window = Minecraft.getInstance().getWindow();
+    private static final Window window = Minecraft.getInstance().getWindow();
     private static FullscreenDisplayMode currentMode;
 
     /**
@@ -34,17 +32,6 @@ public class FullscreenDisplayModeHolder {
 
         log.info("Overwrite finished");
         FullscreenDisplayModeHolder.setFullscreenDisplayModeFromConfig();
-    }
-
-    /**
-     * The fullscreen mode that is applied instead of the native fullscreen once the user hits
-     * F11 or switches to fullscreen in the video settings.
-     *
-     * @return The fullscreen mode
-     */
-    @Nonnull
-    public static Optional<FullscreenDisplayMode> getFullscreenDisplayMode() {
-        return Optional.ofNullable(currentMode);
     }
 
     /**

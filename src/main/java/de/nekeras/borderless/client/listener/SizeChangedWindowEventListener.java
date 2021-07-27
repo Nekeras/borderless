@@ -1,7 +1,7 @@
 package de.nekeras.borderless.client.listener;
 
+import com.mojang.blaze3d.platform.WindowEventHandler;
 import de.nekeras.borderless.client.ReflectionUtils;
-import net.minecraft.client.renderer.IWindowEventListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -14,12 +14,12 @@ import javax.annotation.Nullable;
  * window's size has changed (i.e. every time {@link #resizeDisplay()} is called by a non-GLFW callback).
  */
 @OnlyIn(Dist.CLIENT)
-public class SizeChangedWindowEventListener implements IWindowEventListener {
+public class SizeChangedWindowEventListener implements WindowEventHandler {
 
-    private final IWindowEventListener defaultWindowEventListener;
+    private final WindowEventHandler defaultWindowEventListener;
     private final Runnable onDisplayResize;
 
-    public SizeChangedWindowEventListener(@Nullable IWindowEventListener defaultWindowEventListener, @Nonnull Runnable onDisplayResize) {
+    public SizeChangedWindowEventListener(@Nullable WindowEventHandler defaultWindowEventListener, @Nonnull Runnable onDisplayResize) {
         this.defaultWindowEventListener = defaultWindowEventListener;
         this.onDisplayResize = onDisplayResize;
     }
