@@ -1,6 +1,12 @@
 {
+  "borderless.config.video_settings_button": "Borderless Window...",
+  "borderless.config.video_settings_button.tooltip": "Configuration relating Borderless Window to provide advanced fullscreen options",
   "borderless.config.title": "Borderless Window Config",
-  "borderless.config.fullscreen_mode": "Fullscreen Mode",
+  "borderless.config.apply": "Apply",
+  "borderless.config.enabled": "Enabled",
+  "borderless.config.enabled.tooltip": "Enable/disable Borderless Window",
+  "borderless.config.disabled.description": "Borderless Window is disabled, standard Minecraft fullscreen is used.",
+  "borderless.config.fullscreen_mode": "Fullscreen Display Mode",
   "borderless.config.fullscreen_mode.best": "Best",
   "borderless.config.fullscreen_mode.borderless": "Borderless",
   "borderless.config.fullscreen_mode.native": "Native",

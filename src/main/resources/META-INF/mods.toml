@@ -4,7 +4,7 @@ license = "MIT License"
 issueTrackerURL = "https://github.com/Nekeras/borderless/issues"
 
 [[mods]]
-modId = "borderless"
+modId = "borderlesswindow"
 version = "${version}"
 displayName = "Borderless Window"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/borderless"

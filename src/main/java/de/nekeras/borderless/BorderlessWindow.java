@@ -1,10 +1,10 @@
 package de.nekeras.borderless;
 
+import de.nekeras.borderless.client.gui.ConfigScreen;
 import de.nekeras.borderless.config.Config;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -16,52 +16,46 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * The main Forge mod class.
  */
-@Mod(Borderless.MOD_ID)
+@Mod(BorderlessWindow.MOD_ID)
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD)
-public class Borderless {
+public class BorderlessWindow {
 
     /**
      * The mod id of this Forge mod.
      */
-    public static final String MOD_ID = "borderless";
+    public static final String MOD_ID = "borderlesswindow";
 
     private static final Logger log = LogManager.getLogger();
 
-    public Borderless() {
+    public BorderlessWindow() {
+        log.info("Creating mod instance");
         ModLoadingContext context = ModLoadingContext.get();
 
-        // Client dist only, make sure server is always compatible with this mod
+        log.info("Enable server compatibility");
         context.registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(
                 () -> FMLNetworkConstants.IGNORESERVERONLY,
                 (a, b) -> true));
 
-        // Register the config
+        log.info("Register client configuration");
         context.registerConfig(ModConfig.Type.CLIENT, Config.CONFIG_SPEC);
     }
 
-    @SuppressWarnings("deprecation")
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onClientSetup(@Nullable FMLClientSetupEvent event) {
+    public static void onClientSetup(@Nonnull FMLClientSetupEvent event) {
+        log.info("Initializing from client context");
         ModLoadingContext context = ModLoadingContext.get();
 
-        // Config registration
-        context.registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY,
-                () -> (mc, modListScreen) -> new de.nekeras.borderless.config.gui.ConfigScreen(modListScreen));
+        log.info("Register client configuration screen");
+        context.registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () ->
+                (mc, modListScreen) -> new ConfigScreen(modListScreen));
 
         log.info("Enqueue initialization work to main thread");
-        DeferredWorkQueue.runLater(FullscreenModeHolder::initMinecraft);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public void onConfigReload(ModConfig.Reloading event) {
-        de.nekeras.borderless.FullscreenModeHolder.setFullscreenMode(
-                de.nekeras.borderless.fullscreen.FullscreenMode.fromConfig());
+        event.enqueueWork(de.nekeras.borderless.client.FullscreenDisplayModeHolder::initMinecraft);
     }
 }
