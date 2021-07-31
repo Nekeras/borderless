@@ -50,6 +50,10 @@ minecraft {
 }
 
 tasks.processResources {
+    doFirst {
+        sourceSets.main.get().output.resourcesDir?.let { delete(it.resolve("META-INF/mods.toml")) }
+    }
+
     from(sourceSets.main.get().resources.srcDirs) {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
         include("META-INF/mods.toml")

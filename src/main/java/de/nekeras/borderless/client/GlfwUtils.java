@@ -76,7 +76,7 @@ public final class GlfwUtils {
      * @param attribute The attribute
      */
     public static void disableWindowAttribute(@Nonnull Window window, @Nonnull GlfwWindowAttribute attribute) {
-        log.info("Enable window attribute {}", attribute.name());
+        log.info("Disable window attribute {}", attribute.name());
         GLFW.glfwSetWindowAttrib(window.getWindow(), attribute.getBit(), GLFW.GLFW_FALSE);
     }
 
@@ -97,5 +97,40 @@ public final class GlfwUtils {
         }
 
         log.info("Done resetting window attributes");
+    }
+
+    /**
+     * Prints information of the current input mode for debugging purposes.
+     *
+     * @param window The window to check
+     */
+    public static void checkInputMode(@Nonnull Window window) {
+        log.info("Checking window input mode");
+
+        switch (GLFW.glfwGetInputMode(window.getWindow(), GLFW.GLFW_CURSOR)) {
+            case GLFW.GLFW_CURSOR_NORMAL -> log.info("Detected normal cursor mode");
+            case GLFW.GLFW_CURSOR_HIDDEN -> {
+                log.info("Detected hidden cursor mode");
+                GLFW.glfwSetInputMode(window.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+            }
+            case GLFW.GLFW_CURSOR_DISABLED -> log.info("Detected disabled cursor mode");
+            default -> log.info("Unknown cursor mode");
+        }
+
+        log.info("Done checking window input mode");
+
+        double[] xPos = new double[1];
+        double[] yPos = new double[1];
+
+        GLFW.glfwGetCursorPos(window.getWindow(), xPos, yPos);
+
+        int x = (int) Math.floor(xPos[0]);
+        int y = (int) Math.floor(yPos[0]);
+        int winWidth = window.getWidth();
+        int winHeight = window.getHeight();
+
+        boolean inside = x >= 0 && x <= winWidth && y >= 0 && y <= winHeight;
+        log.info("Cursor is at {}x{} (inside window: {})", x, y, inside);
+        log.info("Done checking cursor position");
     }
 }

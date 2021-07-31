@@ -2,7 +2,7 @@ package de.nekeras.borderless.client;
 
 import com.mojang.blaze3d.platform.Window;
 import de.nekeras.borderless.client.fullscreen.FullscreenDisplayMode;
-import de.nekeras.borderless.client.listener.SizeChangedWindowEventListener;
+import de.nekeras.borderless.client.listener.SizeChangedWindowEventHandler;
 import de.nekeras.borderless.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,7 +27,7 @@ public class FullscreenDisplayModeHolder {
      */
     public static void initMinecraft() {
         log.info("Overwriting Minecraft WindowEventListener");
-        ReflectionUtils.updateWindowEventListener(window, oldListener -> new SizeChangedWindowEventListener(
+        ReflectionUtils.updateWindowEventListener(window, oldListener -> new SizeChangedWindowEventHandler(
                 oldListener, FullscreenDisplayModeHolder::setFullscreenDisplayModeFromConfig));
 
         log.info("Overwrite finished");
@@ -58,6 +58,8 @@ public class FullscreenDisplayModeHolder {
         }
 
         currentMode = newMode;
+
+        GlfwUtils.checkInputMode(window);
     }
 
     /**

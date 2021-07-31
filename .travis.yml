@@ -3,7 +3,7 @@ install: true
 
 os: linux
 dist: trusty
-jdk: oraclejdk8
+jdk: openjdk16
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
