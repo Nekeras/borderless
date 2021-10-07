@@ -1,0 +1,23 @@
+{
+  "borderless.config.video_settings_button": "Plein écran fenêtré...",
+  "borderless.config.video_settings_button.tooltip": "Configuration relative à la fenêtre sans bordure pour fournir des options avancées en plein écran",
+  "borderless.config.title": "Configuration du plein écran fenêtré",
+  "borderless.config.apply": "Appliquer",
+  "borderless.config.enabled": "Activé",
+  "borderless.config.enabled.tooltip": "Activer/désactiver le plein écran fenêtré",
+  "borderless.config.disabled.description": "Le plein écran fenêtré est désactivé, le mode plein écran de Minecraft est utilisé.",
+  "borderless.config.fullscreen_mode": "Mode d'affichage plein écran",
+  "borderless.config.fullscreen_mode.best": "Meilleur",
+  "borderless.config.fullscreen_mode.borderless": "Sans bordures",
+  "borderless.config.fullscreen_mode.native": "Natif",
+  "borderless.config.focus_loss": "A la perte du focus",
+  "borderless.config.focus_loss.do_nothing": "Reste visible",
+  "borderless.config.focus_loss.minimize": "Minimiser",
+  "borderless.config.focus_loss.switch_to_windowed": "Passe en mode fenêtré",
+  "borderless.config.changed": "If the fullscreen mode is not correctly applied, try restarting Minecraft. If it still doesn't work, your operating system might not be fully compatible.",
+  "borderless.best": "Choisit automatiquement le meilleur mode plein écran pour le système d'exploitation actuel. Ce mode plein écran est l'option recommandée.",
+  "borderless.borderless": "Un plein écran sans bordure qui définit la largeur et la hauteur de la fenêtre sur le mode vidéo du moniteur. De plus, il supprime les bordures de la fenêtre pour simuler un plein écran.\n\nCe mode plein écran est la meilleure option pour Windows.",
+  "borderless.native.do_nothing": "Le plein écran standard de Minecraft, mais la fenêtre sera toujours visible lorsque le focus sera perdu. La fenêtre peut être toujours en haut, selon le système d'exploitation actuel.\n\nCe mode plein écran est la meilleure option pour la plupart des distributions Linux prenant en charge X11.",
+  "borderless.native.minimize": "Le plein écran standard de Minecraft qui minimise la fenêtre sur la perte du focus.\n\nCe mode plein écran est la meilleure option pour les systèmes d'exploitation inconnus.",
+  "borderless.native.switch_to_windowed": "Le plein écran standard de Minecraft, mais la fenêtre passera en mode fenêtré une fois que le focus sera perdu."
+}
