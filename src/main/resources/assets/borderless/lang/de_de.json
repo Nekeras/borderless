@@ -1,0 +1,23 @@
+{
+  "borderless.config.video_settings_button": "Rahmenloses Fenster...",
+  "borderless.config.video_settings_button.tooltip": "Konfiguration des rahmenlosen Fensters für weitere Vollbild Optionen.",
+  "borderless.config.title": "Konfiguration für rahmenloses Fenster",
+  "borderless.config.apply": "Übernehmen",
+  "borderless.config.enabled": "Aktiv",
+  "borderless.config.enabled.tooltip": "Rahmenloses Fenster (de-)aktivieren",
+  "borderless.config.disabled.description": "Rahmenloses Fenster deaktiviert, das standardmäßige Minecraft-Vollbild Verhalten wird genutzt.",
+  "borderless.config.fullscreen_mode": "Vollbildmodus",
+  "borderless.config.fullscreen_mode.best": "Bester Modus",
+  "borderless.config.fullscreen_mode.borderless": "Rahmenlos",
+  "borderless.config.fullscreen_mode.native": "Nativ",
+  "borderless.config.focus_loss": "Bei Verlieren des Fokus",
+  "borderless.config.focus_loss.do_nothing": "Im Vordergrund lassen",
+  "borderless.config.focus_loss.minimize": "Minimieren",
+  "borderless.config.focus_loss.switch_to_windowed": "Zu Fenster ändern",
+  "borderless.config.changed": "Wenn der Vollbildmodus nicht korrekt aktiviert wird, versuche Minecraft neu zu starten. Wenn es weiterhin nicht korrekt funktioniert, ist das Betriebssystem womöglich nicht kompatibel.",
+  "borderless.best": "Bestimmt den besten Vollbildmodus für das aktuelle Betriebssystem. Dies ist die empfohlene Einstellung.",
+  "borderless.borderless": "Ein rahmenloses Fenster, dass die Größe des Fensters an den aktuellen Bildschirm anpasst. Zusätzlich werden die Rahmen des Fensters versteckt, sodass ein Vollbild simuliert wird.\n\nDies ist der beste Vollbildmodus für Windows.",
+  "borderless.native.do_nothing": "Das standardmäßige Minecraft-Vollbild Verhalten, jedoch bleibt das Fenster sichtbar und im Vordergrund, sobald das Fenster den Fokus verliert.\n\nDieses Verhalten ist die beste Option für die meisten Linux Distributionen, die auf X11 basieren.",
+  "borderless.native.minimize": "Das standardmäßige Minecraft-Vollbild Verhalten, jedoch wird das Fenster minimiert, wenn das Fenster den Fokus verliert.\n\nDieses Verhalten ist die beste Option für unbekannte Betriebssysteme.",
+  "borderless.native.switch_to_windowed": "Das standardmäßige Minecraft-Vollbild Verhalten, jedoch wird das Fenster in den Fenstermodus wechseln, wenn es den Fokus verliert."
+}
