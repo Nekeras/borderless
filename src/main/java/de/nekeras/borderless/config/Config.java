@@ -28,7 +28,7 @@ public class Config {
      */
     @Nonnull
     public static FullscreenDisplayMode getFullscreenDisplayMode() {
-        if (GENERAL.enabled.get()) {
+        if (Boolean.TRUE.equals(GENERAL.enabled.get())) {
             return switch (GENERAL.fullscreenMode.get()) {
                 case BEST -> DesktopEnvironment.get().getBestFullscreenDisplayMode();
                 case BORDERLESS -> FullscreenDisplayMode.BORDERLESS;

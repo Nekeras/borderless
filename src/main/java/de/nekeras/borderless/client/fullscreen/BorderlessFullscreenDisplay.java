@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Switches into a windowed mode and removes the borders of the window. After that, maximizes the
- * window on the current monitor as returned by {@link MainWindow#findBestMonitor()}.
+ * window on the current monitor as returned by {@link Window#findBestMonitor()}.
  */
 @OnlyIn(Dist.CLIENT)
 public class BorderlessFullscreenDisplay implements FullscreenDisplayMode {

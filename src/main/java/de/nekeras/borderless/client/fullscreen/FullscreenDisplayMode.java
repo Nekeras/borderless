@@ -8,9 +8,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 
 /**
- * A fullscreen mode that can be applied for the Minecraft {@link MainWindow}. The {@link
- * #apply(MainWindow)} method
- * will be called every time the window enters fullscreen, the {@link #reset(MainWindow)} method
+ * A fullscreen mode that can be applied for the Minecraft {@link Window}. The {@link
+ * #apply(Window)} method
+ * will be called every time the window enters fullscreen, the {@link #reset(Window)} method
  * every time the window
  * leaves fullscreen.
  */
@@ -19,13 +19,13 @@ public interface FullscreenDisplayMode {
 
     /**
      * Switches into a windowed mode and removes the borders of the window. After that, maximizes
-     * the window on the current monitor as returned by {@link MainWindow#get()}.
+     * the window on the current monitor as returned by {@link Window#findBestMonitor()}.
      */
     FullscreenDisplayMode BORDERLESS = new BorderlessFullscreenDisplay();
 
     /**
      * The native fullscreen mode, this fullscreen mode can be used to disable this mod, as this
-     * mode will not affect the {@link MainWindow}.
+     * mode will not affect the {@link Window}.
      */
     FullscreenDisplayMode NATIVE = new NativeFullscreenDisplay();
 
@@ -51,7 +51,7 @@ public interface FullscreenDisplayMode {
 
     /**
      * Resets this fullscreen mode on the supplied window, reverting any changes that were made in
-     * {@link #apply(MainWindow)}.
+     * {@link #apply(Window)}.
      *
      * @param window The window
      */

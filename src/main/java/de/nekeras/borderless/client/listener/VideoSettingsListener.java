@@ -7,11 +7,9 @@ import de.nekeras.borderless.client.gui.ConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.VideoSettingsScreen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -25,12 +23,11 @@ import java.util.List;
 public class VideoSettingsListener {
 
     private static final String TITLE_KEY = "borderless.config.video_settings_button";
-    private static final Component tooltip = new TranslatableComponent("borderless.config.video_settings_button.tooltip");
     private static final Logger log = LogManager.getLogger();
 
     @SubscribeEvent
-    public static void onVideoSettings(@Nonnull GuiScreenEvent.InitGuiEvent.Post event) {
-        if (event.getGui() instanceof VideoSettingsScreen screen) {
+    public static void onVideoSettings(@Nonnull ScreenEvent.InitScreenEvent.Post event) {
+        if (event.getScreen() instanceof VideoSettingsScreen screen) {
             log.info("Opened VideoSettingsScreen");
 
             ReflectionUtils.getOptionsList(screen).ifPresent(optionsList -> addToOptionsList(screen, optionsList));

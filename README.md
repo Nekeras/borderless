@@ -1,4 +1,4 @@
-# Borderless Window [![Build Status](https://travis-ci.com/Nekeras/borderless.svg?branch=master)](https://travis-ci.com/Nekeras/borderless) [![](http://cf.way2muchnoise.eu/versions/borderless.svg)](https://www.curseforge.com/minecraft/mc-mods/borderless)
+# Borderless Window [![Build Status](https://app.travis-ci.com/Nekeras/borderless.svg?branch=master)](https://travis-ci.com/Nekeras/borderless) [![](http://cf.way2muchnoise.eu/versions/borderless.svg)](https://www.curseforge.com/minecraft/mc-mods/borderless)
 This mod replaces the standard Minecraft fullscreen mode with a custom borderless windowed fullscreen. This is especially useful in a multi-monitor scenario to easily switch to a program on a different monitor. The default behavior of the Minecraft fullscreen would minimize the game, once it loses focus. With this mod, the window will not minimize when switching to another program. Furthermore, other windows can be placed on top of the Minecraft window.
 
 This mod works great with Forge and OptiFine.

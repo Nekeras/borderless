@@ -73,12 +73,12 @@ public final class ReflectionUtils {
     }
 
     /**
-     * Updates the {@link IWindowEventListener} in the {@link MainWindow} instance with a custom
+     * Updates the {@link IWindowEventListener} in the {@link Window} instance with a custom
      * window event listener.
      *
      * @param window         The window to update the listener for
      * @param updateSupplier A function that accepts the original value of the
-     *                       {@link IWindowEventListener} field in the {@link MainWindow} instance
+     *                       {@link IWindowEventListener} field in the {@link Window} instance
      *                       and returns a new value that should be assigned
      */
     public static void updateWindowEventListener(@Nonnull Window window, @Nonnull Function<WindowEventHandler, WindowEventHandler> updateSupplier) {
