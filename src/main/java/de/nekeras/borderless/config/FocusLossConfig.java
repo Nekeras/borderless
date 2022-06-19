@@ -1,28 +1,28 @@
 package de.nekeras.borderless.config;
 
 import de.nekeras.borderless.client.fullscreen.FullscreenDisplayMode;
-import de.nekeras.borderless.util.Translatable;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.OptionEnum;
+
+import javax.annotation.Nonnull;
 
 /**
  * Settings for a focus loss behaviour that is applied on a fullscreen window. These setting will
  * only be applied to a {@link FullscreenDisplayMode#NATIVE native fullscreen window}.
  */
-public enum FocusLossConfig implements Translatable {
+public enum FocusLossConfig implements OptionEnum {
 
     /**
      * Doesn't do anything when focus on a fullscreen window is lost, the window may be always on
      * top, depending on the operating system.
      */
-    DO_NOTHING("Doesn't do anything when focus on a fullscreen window is lost, the window may be "
+    DO_NOTHING(0, "Doesn't do anything when focus on a fullscreen window is lost, the window may be "
             + "always on top, depending on the operating system."),
 
     /**
      * Minimizes (iconify) the window when focus on a fullscreen window is lost, this is the default
      * Minecraft behaviour.
      */
-    MINIMIZE(
+    MINIMIZE(1,
             "Minimizes (iconify) the window when focus on a fullscreen window is lost, this is the "
                     + "default Minecraft behaviour."),
 
@@ -30,7 +30,7 @@ public enum FocusLossConfig implements Translatable {
      * Switches to a windowed mode and leaves the fullscreen when focus on a fullscreen window is
      * lost.
      */
-    SWITCH_TO_WINDOWED(
+    SWITCH_TO_WINDOWED(2,
             "Switches to a windowed mode and leaves the fullscreen when focus on a fullscreen window "
                     + "is lost."),
 
@@ -38,12 +38,14 @@ public enum FocusLossConfig implements Translatable {
 
     private static final String BASE_KEY = "borderless.config.focus_loss.%s";
 
+    private final int id;
     private final String comment;
-    private final TranslatableComponent translation;
+    private final String translationKey;
 
-    FocusLossConfig(String comment) {
+    FocusLossConfig(int id, @Nonnull String comment) {
+        this.id = id;
         this.comment = comment;
-        this.translation = new TranslatableComponent(String.format(BASE_KEY, name().toLowerCase()));
+        this.translationKey = String.format(BASE_KEY, name().toLowerCase());
     }
 
     /**
@@ -56,13 +58,18 @@ public enum FocusLossConfig implements Translatable {
     }
 
     @Override
-    public Component getTranslation() {
-        return translation;
+    public int getId() {
+        return id;
+    }
+
+    @Nonnull
+    @Override
+    public String getKey() {
+        return translationKey;
     }
 
     @Override
     public String toString() {
-        return translation.getKey();
+        return translationKey;
     }
-
 }

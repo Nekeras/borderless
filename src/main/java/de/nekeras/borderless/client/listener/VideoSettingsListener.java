@@ -2,7 +2,6 @@ package de.nekeras.borderless.client.listener;
 
 import de.nekeras.borderless.BorderlessWindow;
 import de.nekeras.borderless.client.ReflectionUtils;
-import de.nekeras.borderless.client.gui.ButtonOption;
 import de.nekeras.borderless.client.gui.ConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.OptionsList;
@@ -36,14 +35,13 @@ public class VideoSettingsListener {
 
     private static void addToOptionsList(@Nonnull VideoSettingsScreen screen, @Nonnull OptionsList optionsRowList) {
         log.info("Found OptionsList");
-        Minecraft minecraft = Minecraft.getInstance();
-
-        ButtonOption fullscreenOption = new ButtonOption(TITLE_KEY,
-                btn -> minecraft.setScreen(new ConfigScreen(screen)));
-
-        optionsRowList.addBig(fullscreenOption);
-        moveLastEntryToStart(optionsRowList.children());
-        log.info("Added Borderless Window Config Screen to OptionsList");
+//        TODO re-add config button
+//        Minecraft minecraft = Minecraft.getInstance();
+//
+//
+//        optionsRowList.addBig(fullscreenOption);
+//        moveLastEntryToStart(optionsRowList.children());
+//        log.info("Added Borderless Window Config Screen to OptionsList");
     }
 
     private static <T> void moveLastEntryToStart(List<T> list) {

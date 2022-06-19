@@ -1,13 +1,15 @@
 package de.nekeras.borderless.client.gui;
 
+import com.mojang.serialization.Codec;
 import de.nekeras.borderless.config.Config;
 import de.nekeras.borderless.config.FocusLossConfig;
 import de.nekeras.borderless.config.FullscreenModeConfig;
-import net.minecraft.client.CycleOption;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Arrays;
 
 @OnlyIn(Dist.CLIENT)
 public class ConfigScreenOption {
@@ -15,27 +17,32 @@ public class ConfigScreenOption {
     private static final String ENABLED_KEY = "borderless.config.enabled";
     private static final String FULLSCREEN_MODE_KEY = "borderless.config.fullscreen_mode";
     private static final String FOCUS_LOSS_KEY = "borderless.config.focus_loss";
-    private static final Component enabledTooltip = new TranslatableComponent("borderless.config.enabled.tooltip");
+    private static final Component enabledTooltip = Component.translatable("borderless.config.enabled.tooltip");
 
-    public static final CycleOption<Boolean> enabled = CycleOption.createOnOff(
+    public static final OptionInstance<Boolean> enabled = OptionInstance.createBoolean(
             ENABLED_KEY,
-            enabledTooltip,
-            options -> Config.GENERAL.enabled.get(),
-            (options, opt, value) -> Config.GENERAL.enabled.set(value));
-
-    public static final CycleOption<FullscreenModeConfig> fullscreenMode = CycleOption.create(
-            FULLSCREEN_MODE_KEY,
-            FullscreenModeConfig.values(),
-            FullscreenModeConfig::getTranslation,
-            options -> Config.GENERAL.fullscreenMode.get(),
-            (options, opt, value) -> Config.GENERAL.fullscreenMode.set(value)
+            mc -> value -> mc.font.split(enabledTooltip, 200),
+            Config.GENERAL.enabled.get(),
+            Config.GENERAL.enabled::set
     );
 
-    public static final CycleOption<FocusLossConfig> focusLoss = CycleOption.create(
+    public static final OptionInstance<FullscreenModeConfig> fullscreenMode = new OptionInstance<>(
+            FULLSCREEN_MODE_KEY,
+            OptionInstance.noTooltip(),
+            OptionInstance.forOptionEnum(),
+            new OptionInstance.Enum<>(Arrays.asList(FullscreenModeConfig.values()),
+            Codec.STRING.xmap(FullscreenModeConfig::valueOf, Enum::name)),
+            Config.GENERAL.fullscreenMode.get(),
+            Config.GENERAL.fullscreenMode::set
+    );
+
+    public static final OptionInstance<FocusLossConfig> focusLoss = new OptionInstance<>(
             FOCUS_LOSS_KEY,
-            FocusLossConfig.values(),
-            FocusLossConfig::getTranslation,
-            options -> Config.GENERAL.focusLoss.get(),
-            (options, opt, value) -> Config.GENERAL.focusLoss.set(value)
+            OptionInstance.noTooltip(),
+            OptionInstance.forOptionEnum(),
+            new OptionInstance.Enum<>(Arrays.asList(FocusLossConfig.values()),
+            Codec.STRING.xmap(FocusLossConfig::valueOf, Enum::name)),
+            Config.GENERAL.focusLoss.get(),
+            Config.GENERAL.focusLoss::set
     );
 }

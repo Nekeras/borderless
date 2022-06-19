@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -28,10 +27,10 @@ public class ConfigScreen extends Screen {
     private static final int YELLOW = 0xffff00;
     private static final int RED = 0xff0000;
     private static final int LINE_HEIGHT = 25;
-    private static final Component titleText = new TranslatableComponent("borderless.config.title");
-    private static final Component applyText = new TranslatableComponent("borderless.config.apply");
-    private static final Component changedWarningText = new TranslatableComponent("borderless.config.changed");
-    private static final Component disabledText = new TranslatableComponent("borderless.config.disabled.description");
+    private static final Component titleText = Component.translatable("borderless.config.title");
+    private static final Component applyText = Component.translatable("borderless.config.apply");
+    private static final Component changedWarningText = Component.translatable("borderless.config.changed");
+    private static final Component disabledText = Component.translatable("borderless.config.disabled.description");
     private static final Logger log = LogManager.getLogger();
 
     private final Screen parent;
@@ -119,7 +118,7 @@ public class ConfigScreen extends Screen {
         int y = LINE_HEIGHT * 5;
 
         if (Config.GENERAL.enabled.get()) {
-            minecraft.font.drawWordWrap(new TranslatableComponent(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
+            minecraft.font.drawWordWrap(Component.translatable(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
         } else {
             minecraft.font.drawWordWrap(disabledText, x, y, LAYOUT_MAX_WIDTH, RED);
         }
