@@ -25,7 +25,7 @@ public class VideoSettingsListener {
     private static final Logger log = LogManager.getLogger();
 
     @SubscribeEvent
-    public static void onVideoSettings(@Nonnull ScreenEvent.InitScreenEvent.Post event) {
+    public static void onVideoSettings(@Nonnull ScreenEvent.Init.Post event) {
         if (event.getScreen() instanceof VideoSettingsScreen screen) {
             log.info("Opened VideoSettingsScreen");
 
