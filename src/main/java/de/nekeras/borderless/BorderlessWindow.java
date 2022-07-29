@@ -4,7 +4,7 @@ import de.nekeras.borderless.client.gui.ConfigScreen;
 import de.nekeras.borderless.config.Config;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -51,8 +51,8 @@ public class BorderlessWindow {
         ModLoadingContext context = ModLoadingContext.get();
 
         log.info("Register client configuration screen");
-        context.registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () ->
-                new ConfigGuiHandler.ConfigGuiFactory((mc, modListScreen) -> new ConfigScreen(modListScreen)));
+        context.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
+                new ConfigScreenHandler.ConfigScreenFactory((mc, modListScreen) -> new ConfigScreen(modListScreen)));
 
         log.info("Enqueue initialization work to main thread");
         event.enqueueWork(de.nekeras.borderless.client.FullscreenDisplayModeHolder::initMinecraft);
