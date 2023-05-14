@@ -59,20 +59,20 @@ public class ConfigScreen extends Screen {
         fullscreenModeButton = ConfigScreenOption.fullscreenMode.createButton(minecraft.options, x, LINE_HEIGHT * 3, LAYOUT_MAX_WIDTH);
         focusLossButton = ConfigScreenOption.focusLoss.createButton(minecraft.options, x, LINE_HEIGHT * 4, LAYOUT_MAX_WIDTH);
 
-        Button applyButton = new Button(width / 2 - 125, height - 75, 100, 20, applyText, btn -> {
+        Button applyButton = Button.builder(applyText, btn -> {
             log.info("Apply button in Borderless Window Config Screen pressed");
             FullscreenDisplayModeHolder.setFullscreenDisplayModeFromConfig();
             onClose();
-        });
+        }).bounds(width / 2 - 125, height - 75, 100, 20).build();
 
-        Button cancelButton = new Button(width / 2 + 25, height - 75, 100, 20, CommonComponents.GUI_CANCEL, btn -> {
+        Button cancelButton = Button.builder(CommonComponents.GUI_CANCEL, btn -> {
             log.info("Cancel button in Borderless Window Config Screen pressed, resetting to {}, {}, {}",
                     initialEnabledState, initialFullscreenMode, initialFocusLossMode);
             Config.GENERAL.enabled.set(initialEnabledState);
             Config.GENERAL.fullscreenMode.set(initialFullscreenMode);
             Config.GENERAL.focusLoss.set(initialFocusLossMode);
             onClose();
-        });
+        }).bounds(width / 2 + 25, height - 75, 100, 20).build();
 
         addRenderableWidget(enabledButton);
         addRenderableWidget(fullscreenModeButton);
@@ -91,16 +91,16 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float frameTime) {
+    public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float frameTime) {
         Minecraft minecraft = Minecraft.getInstance();
 
-        this.renderBackground(matrixStack);
+        this.renderBackground(poseStack);
 
-        renderTitle(matrixStack, minecraft, width);
-        renderDescription(minecraft, width);
-        renderChangedWarning(minecraft, width, height);
+        renderTitle(poseStack, minecraft, width);
+        renderDescription(poseStack, minecraft, width);
+        renderChangedWarning(poseStack, minecraft, width, height);
 
-        super.render(matrixStack, mouseX, mouseY, frameTime);
+        super.render(poseStack, mouseX, mouseY, frameTime);
     }
 
     @Override
@@ -109,38 +109,38 @@ public class ConfigScreen extends Screen {
         Minecraft.getInstance().setScreen(parent);
     }
 
-    private void renderTitle(@Nonnull PoseStack matrixStack, @Nonnull Minecraft minecraft, int width) {
-        drawCenteredString(matrixStack, minecraft.font, title, width / 2, 20, WHITE);
+    private void renderTitle(@Nonnull PoseStack postStack, @Nonnull Minecraft minecraft, int width) {
+        drawCenteredString(postStack, minecraft.font, title, width / 2, 20, WHITE);
     }
 
-    private void renderDescription(@Nonnull Minecraft minecraft, int width) {
+    private void renderDescription(@Nonnull PoseStack poseStack, @Nonnull Minecraft minecraft, int width) {
         int x = getHorizontalLayoutStart(width);
         int y = LINE_HEIGHT * 5;
 
         if (Config.GENERAL.enabled.get()) {
-            minecraft.font.drawWordWrap(Component.translatable(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
+            minecraft.font.drawWordWrap(poseStack, Component.translatable(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
         } else {
-            minecraft.font.drawWordWrap(disabledText, x, y, LAYOUT_MAX_WIDTH, RED);
+            minecraft.font.drawWordWrap(poseStack, disabledText, x, y, LAYOUT_MAX_WIDTH, RED);
         }
     }
 
-    private void renderChangedWarning(@Nonnull Minecraft minecraft, int width, int height) {
+    private void renderChangedWarning(@Nonnull PoseStack poseStack, @Nonnull Minecraft minecraft, int width, int height) {
         int x = getHorizontalLayoutStart(width);
         int y = height - 50;
 
-        minecraft.font.drawWordWrap(changedWarningText, x, y, LAYOUT_MAX_WIDTH, YELLOW);
+        minecraft.font.drawWordWrap(poseStack, changedWarningText, x, y, LAYOUT_MAX_WIDTH, YELLOW);
     }
 
     private String getDescriptionKey() {
         FullscreenModeConfig mode = Config.GENERAL.fullscreenMode.get();
         String modeKey = String.format(DESCRIPTION_KEY_BASE, mode.name().toLowerCase());
 
-        if (mode != FullscreenModeConfig.NATIVE) {
-            return modeKey;
-        } else {
+        if (mode == FullscreenModeConfig.NATIVE) {
             FocusLossConfig focusLoss = Config.GENERAL.focusLoss.get();
 
             return String.format("%s.%s", modeKey, focusLoss.name().toLowerCase());
+        } else {
+            return modeKey;
         }
     }
 

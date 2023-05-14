@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec;
 import de.nekeras.borderless.config.Config;
 import de.nekeras.borderless.config.FocusLossConfig;
 import de.nekeras.borderless.config.FullscreenModeConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,7 +23,7 @@ public class ConfigScreenOption {
 
     public static final OptionInstance<Boolean> enabled = OptionInstance.createBoolean(
             ENABLED_KEY,
-            mc -> value -> mc.font.split(enabledTooltip, 200),
+            value -> Tooltip.create(enabledTooltip),
             Config.GENERAL.enabled.get(),
             Config.GENERAL.enabled::set
     );
