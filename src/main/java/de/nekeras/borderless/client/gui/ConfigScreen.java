@@ -6,6 +6,7 @@ import de.nekeras.borderless.config.Config;
 import de.nekeras.borderless.config.FocusLossConfig;
 import de.nekeras.borderless.config.FullscreenModeConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -91,16 +92,16 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float frameTime) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float frameTime) {
         Minecraft minecraft = Minecraft.getInstance();
 
-        this.renderBackground(poseStack);
+        this.renderBackground(guiGraphics);
 
-        renderTitle(poseStack, minecraft, width);
-        renderDescription(poseStack, minecraft, width);
-        renderChangedWarning(poseStack, minecraft, width, height);
+        renderTitle(guiGraphics, minecraft, width);
+        renderDescription(guiGraphics, minecraft, width);
+        renderChangedWarning(guiGraphics, minecraft, width, height);
 
-        super.render(poseStack, mouseX, mouseY, frameTime);
+        super.render(guiGraphics, mouseX, mouseY, frameTime);
     }
 
     @Override
@@ -109,26 +110,26 @@ public class ConfigScreen extends Screen {
         Minecraft.getInstance().setScreen(parent);
     }
 
-    private void renderTitle(@Nonnull PoseStack postStack, @Nonnull Minecraft minecraft, int width) {
-        drawCenteredString(postStack, minecraft.font, title, width / 2, 20, WHITE);
+    private void renderTitle(@Nonnull GuiGraphics guiGraphics, @Nonnull Minecraft minecraft, int width) {
+        guiGraphics.drawCenteredString(minecraft.font, title, width / 2, 20, WHITE);
     }
 
-    private void renderDescription(@Nonnull PoseStack poseStack, @Nonnull Minecraft minecraft, int width) {
+    private void renderDescription(@Nonnull GuiGraphics guiGraphics, @Nonnull Minecraft minecraft, int width) {
         int x = getHorizontalLayoutStart(width);
         int y = LINE_HEIGHT * 5;
 
         if (Config.GENERAL.enabled.get()) {
-            minecraft.font.drawWordWrap(poseStack, Component.translatable(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
+            guiGraphics.drawWordWrap(minecraft.font, Component.translatable(getDescriptionKey()), x, y, LAYOUT_MAX_WIDTH, WHITE);
         } else {
-            minecraft.font.drawWordWrap(poseStack, disabledText, x, y, LAYOUT_MAX_WIDTH, RED);
+            guiGraphics.drawWordWrap(minecraft.font, disabledText, x, y, LAYOUT_MAX_WIDTH, RED);
         }
     }
 
-    private void renderChangedWarning(@Nonnull PoseStack poseStack, @Nonnull Minecraft minecraft, int width, int height) {
+    private void renderChangedWarning(@Nonnull GuiGraphics guiGraphics, @Nonnull Minecraft minecraft, int width, int height) {
         int x = getHorizontalLayoutStart(width);
         int y = height - 50;
 
-        minecraft.font.drawWordWrap(poseStack, changedWarningText, x, y, LAYOUT_MAX_WIDTH, YELLOW);
+        guiGraphics.drawWordWrap(minecraft.font, changedWarningText, x, y, LAYOUT_MAX_WIDTH, YELLOW);
     }
 
     private String getDescriptionKey() {
