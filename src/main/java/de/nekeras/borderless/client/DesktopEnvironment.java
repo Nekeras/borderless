@@ -29,7 +29,7 @@ public enum DesktopEnvironment {
     /**
      * Wayland window server used by Linux distributions.
      */
-    WAYLAND(FullscreenDisplayMode.NATIVE),
+    WAYLAND(FullscreenDisplayMode.NATIVE_NON_ICONIFY),
 
     /**
      * An unknown desktop environment, this should always use {@link NativeFullscreenDisplay}.
