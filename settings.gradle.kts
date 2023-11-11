@@ -6,7 +6,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             when (requested.id.id) {
-                "net.minecraftforge.gradle" -> useModule("net.minecraftforge.gradle:ForgeGradle:5.1.+")
+                "net.minecraftforge.gradle" -> useModule("net.minecraftforge.gradle:ForgeGradle:6.0.+")
             }
         }
     }
