@@ -1,6 +1,5 @@
 package de.nekeras.borderless.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import de.nekeras.borderless.client.FullscreenDisplayModeHolder;
 import de.nekeras.borderless.config.Config;
 import de.nekeras.borderless.config.FocusLossConfig;
@@ -95,7 +94,7 @@ public class ConfigScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float frameTime) {
         Minecraft minecraft = Minecraft.getInstance();
 
-        this.renderBackground(guiGraphics);
+        this.renderBackground(guiGraphics, mouseX, mouseY, frameTime);
 
         renderTitle(guiGraphics, minecraft, width);
         renderDescription(guiGraphics, minecraft, width);

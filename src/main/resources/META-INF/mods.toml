@@ -14,3 +14,4 @@ description = '''
 Replaces the standard Minecraft fullscreen with a borderless window.
 This allows to easily switch monitors when Minecraft is not focussed, without minimizing the game.
 '''
+displayTest = "IGNORE_ALL_VERSION"
